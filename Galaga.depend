@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1523122934 source:c:\users\jon patel\desktop\galaga\main.cpp
+	<iostream>
+	"SDL_Plotter.h"
+
+1522807079 c:\users\jon patel\desktop\galaga\sdl_plotter.h
+	<SDL2/SDL.h>
+	<SDL2/SDL_mixer.h>
+	<string.h>
+	<iostream>
+	<string>
+	<string.h>
+	<map>
+
+1523121896 source:c:\users\jon patel\desktop\galaga\sphere.cpp
+
+1523121994 source:c:\users\jon patel\desktop\galaga\point.cpp
+
