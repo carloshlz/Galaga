@@ -20,7 +20,9 @@ int main(int argc, char ** argv)
     int R,G,B;
 
     Sphere ship;
-    ship.setCenter(Point(350, 600));
+
+    ship.setX(350);
+    ship.setY(600);
     ship.setColor(Color(212, 20, 20));
     ship.setRadius(10);
 
