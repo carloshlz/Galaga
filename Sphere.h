@@ -32,8 +32,8 @@ class Sphere
 
         void setX(int nx);
         void setY(int ny);
-        getX();
-        getY();
+        int getX();
+        int getY();
 
         //Getters constant
         double getRadius() const;
@@ -140,12 +140,12 @@ void Sphere::erase(SDL_Plotter& g) const{ //label plotter g
 }
 */
 
-Sphere::getX()
+int Sphere::getX()
 {
   return x;
 }
 
-Sphere::getY()
+int Sphere::getY()
 {
   return y;
 }
@@ -162,19 +162,19 @@ void Sphere::setY(int ny)
 
 void Sphere::moveSphere(char direction)
 {
-    switch (direction)
+    switch (toupper(direction))
     {
-        case 'w':
-            setY(getY() - 10);
+        case 'W':
+            setY(getY() - 5);
             break;
-        case 's':
-            setY(getY() + 10);
+        case 'S':
+            setY(getY() + 5);
             break;
         case 'A':
-            setX(getX() - 10);
+            setX(getX() - 5);
             break;
         case 'D':
-            setX(getX() + 10);
+            setX(getX() + 5);
             break;
     }
 }
