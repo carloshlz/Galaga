@@ -32,47 +32,25 @@ int main(int argc, char ** argv)
     {
 		if(!stopped)
 		{
-      //x = rand()%g.getCol();
-			//y = rand()%g.getRow();
-      //x = 20;
-			//y = 20;
-
-			//R = rand()%256;
-			//G = rand()%256;
-			//B = rand()%256;
-
-			//g.getCol();
-			//g.getRow();
-			//g.plotPixel(x,y,R,G,B);
-      //test = ship.getColor();
-
-			//cout << test.R << endl;
 
 			ship.draw(g);
-			/*
+
 char direction;
 if(g.kbhit())
 {
   cout << g.getKey() << endl;
+  ship.eraseSphere(g);
+  direction = g.getKey();
+  ship.moveSphere(direction);
+  ship.draw(g);
 
-    switch (direction)
-    {
-        case 'w':
-            y--;
-            break;
-        case 's':
-            y++;
-            break;
-        case 'a':
-            x--;
-            break;
-        case 'd':
-            x++;
-            break;
-    }
+
+cout << ship.getX() << " " << ship.getY() << endl;
+
+
 }
 
-*/
+
 
 			/*
 			for(xd = 0; xd < 10 && x + xd < g.getCol(); xd++ ){

@@ -43,7 +43,7 @@ class Sphere
 
 
         void draw(SDL_Plotter&) const;
-        void erase(SDL_Plotter&) const;
+        void eraseSphere(SDL_Plotter& g) const;
 
         void moveSphere(char direction);
 
@@ -104,10 +104,25 @@ void Sphere::draw(SDL_Plotter& g) const
     {
       for(int newY = -radius; newY <= radius; newY++)
       {
-          if(sqrt(x*x + y*y <= radius))
+          if(sqrt(newX*newX + newY*newY <= radius))
           {
             g.plotPixel(x + newX, y + newY, sphereColor.R, sphereColor.G, sphereColor.B);
-            g.plotPixel(x + newX,-y + newY, sphereColor.R, sphereColor.G, sphereColor.B);
+            g.plotPixel(x + newX,y - newY, sphereColor.R, sphereColor.G, sphereColor.B);
+          }
+      }
+    }
+}
+
+void Sphere::eraseSphere(SDL_Plotter& g) const
+{
+  for(int newX = -radius; newX <= radius; newX++)
+    {
+      for(int newY = -radius; newY <= radius; newY++)
+      {
+          if(sqrt(newX*newX + newY*newY <= radius))
+          {
+            g.plotPixel(x + newX, y + newY, 255,255,255);
+            g.plotPixel(x + newX,y - newY, 255,255,255);
           }
       }
     }
@@ -155,10 +170,10 @@ void Sphere::moveSphere(char direction)
         case 's':
             setY(getY() + 10);
             break;
-        case 'a':
+        case 'A':
             setX(getX() - 10);
             break;
-        case 'd':
+        case 'D':
             setX(getX() + 10);
             break;
     }
