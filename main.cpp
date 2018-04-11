@@ -6,11 +6,73 @@
 #include "Color.h"
 #include "Sphere.h"
 #include "Point.h"
+#include "Rectangle.h"
 #include "Projectile.h"
 
 
 
 using namespace std;
+
+
+/*This source code copyrighted by Lazy Foo' Productions (2004-2015)
+and may not be redistributed without written permission.*/
+/*
+//Using SDL and standard IO
+#include <SDL.h>
+#include <stdio.h>
+
+//Screen dimension constants
+const int SCREEN_WIDTH = 700;
+const int SCREEN_HEIGHT = 700;
+
+int main( int argc, char* args[] )
+{
+	//The window we'll be rendering to
+	SDL_Window* window = NULL;
+
+	//The surface contained by the window
+	SDL_Surface* screenSurface = NULL;
+
+	//Initialize SDL
+	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	{
+		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+	}
+	else
+	{
+		//Create window
+		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED,
+                                SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                                SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+		if( window == NULL )
+		{
+			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+		}
+		else
+		{
+			//Get window surface
+			screenSurface = SDL_GetWindowSurface( window );
+
+			//Fill the surface white
+			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0,0,0)); //0xFF, 0xFF, 0xFF ) );
+
+			//Update the surface
+			SDL_UpdateWindowSurface( window );
+
+			//Wait two seconds
+			//SDL_Delay( 2000 );
+		}
+	}
+
+	//Destroy window
+	SDL_DestroyWindow( window );
+
+	//Quit SDL subsystems
+	SDL_Quit();
+
+	return 0;
+}
+*/
 
 int main(int argc, char ** argv)
 {
@@ -22,17 +84,29 @@ int main(int argc, char ** argv)
     int R,G,B;
 
     Sphere ship;
-    Projectile missile;
 
     ship.setX(350);
     ship.setY(600);
     ship.setColor(Color(212, 20, 20));
     ship.setRadius(10);
 
+    Projectile missile;
+
     missile.setX(350);
     missile.setY(595);
     missile.setColor(Color(212, 20, 20));
     missile.setRadius(10);
+
+    Rectangle laser;
+
+    laser.setUpperLeftX(0);
+    laser.setUpperLeftY(0);
+
+    laser.setLowerRightX(100);
+    laser.setLowerRightY(100);
+
+    laser.setColorRectangle(Color(200,200,200));
+
 
     Color test;
 
@@ -54,6 +128,7 @@ int main(int argc, char ** argv)
 		{
 
 			ship.draw(g);
+			laser.drawRectangle(g);
 
 
 
@@ -105,6 +180,8 @@ if(g.kbhit())
 				}
 			}
 			*/
+
+
 		}
 
 		if(g.kbhit()){
@@ -119,3 +196,4 @@ if(g.kbhit())
     }
     return 0;
 }
+

@@ -6,53 +6,55 @@
 #include <iostream>
 using namespace std;
 
-struct Rectangle
+class Rectangle
 {
     //Public data
-    int UpperLeftX;
-    int UpplerLeftY;
-    int LowerRightX;
-    int LowerLeftY;
-    Color rectangleColor;
+    private:
+      int UpperLeftX;
+      int UpperLeftY;
+      int LowerRightX;
+      int LowerRightY;
+      Color rectangleColor;
 
-    //Setter
-    void setUpperLeftX(int);
-    void setUpplerLeftY(int);
-    void setLowerRightX(int);
-    void setLowerLeftY(int);
-    void setColorRectangle(const Color&);
+    public:
+      //Setter
+      void setUpperLeftX(int);
+      void setUpperLeftY(int);
+      void setLowerRightX(int);
+      void setLowerRightY(int);
+      void setColorRectangle(const Color&);
 
-    //Getter
-    int getUpperLeftX();
-    int getUpplerLeftY();
-    int getLowerRightX();
-    int getLowerLeftY();
+      //Getter
+      int getUpperLeftX();
+      int getUpperLeftY();
+      int getLowerRightX();
+      int getLowerRightY();
 
-    //Constructor
-    Rectangle();
-    Rectangle(int UpperLeftX, int UpperLeftY, int LowerRightX, int LowerLeftY);
+      //Constructor
+      Rectangle();
+      Rectangle(int UpperLeftX, int UpperLeftY, int LowerRightX, int LowerRightY);
 
-    void drawRectangle(SDL_Plotter& r);
+      void drawRectangle(SDL_Plotter& r);
 };
 
 //Constructor
 Rectangle::Rectangle()
 {
-    UpperLeftX = 10
-    UpplerLeftY = 10;
-    LowerRightX = 5;
-    LowerLeftY = 5;
-    Color rectangleColor = Color(100,100,100);
+    UpperLeftX = 0;
+    UpperLeftY = 0;
+    LowerRightX = 0;
+    LowerRightY = 0;
+    Color rectangleColor = Color(200,200,200);
 
 }
 
 Rectangle::Rectangle(int ULX, int ULY, int LRX, int LLY)
 {
     UpperLeftX = ULX;
-    UpplerLeftY = ULY;
+    UpperLeftY = ULY;
     LowerRightX = LRX;
-    LowerLeftY = LLY;
-    Color rectangleColor = Color(100,100,100);
+    LowerRightY = LLY;
+    Color rectangleColor = Color(500,500,500);
 }
 
 //Setter
@@ -60,7 +62,7 @@ void Rectangle::setUpperLeftX(int ULX)
 {
     UpperLeftX = ULX;
 }
-void Rectangle::setUpplerLeftY(int ULY)
+void Rectangle::setUpperLeftY(int ULY)
 {
     UpperLeftY = ULY;
 }
@@ -68,42 +70,42 @@ void Rectangle::setLowerRightX(int LRX)
 {
     LowerRightX = LRX;
 }
-void Rectangle::setLowerLeftY(int LLY)
+void Rectangle::setLowerRightY(int LLY)
 {
-    LowerLeftY = LLY;
+    LowerRightY = LLY;
 }
 
-void Rectangle::setColorRectangle(const Color& c)
+void Rectangle::setColorRectangle(const Color& d)
 {
-    rectangleColor = c;
+    rectangleColor = d;
 }
 
 
 //Getter
-int Rectangle::setUpperLeftX()
+int Rectangle::getUpperLeftX()
 {
     return UpperLeftX;
 }
-int Rectangle::setUpplerLeftY()
+int Rectangle::getUpperLeftY()
 {
     return UpperLeftY;
 }
-int Rectangle::setLowerRightX()
+int Rectangle::getLowerRightX()
 {
     return LowerRightX;
 }
-int Rectangle::setLowerLeftY()
+int Rectangle::getLowerRightY()
 {
-    return LowerLeftY;
+    return LowerRightY;
 }
 
-void drawRectangle(SDL_Plotter& r)
+void Rectangle::drawRectangle(SDL_Plotter& g)
 {
-    for(int y = upperLeftY; y <= lowerRightY; y++)
+    for(int y = getUpperLeftY(); y <= getLowerRightY(); y++)
     {
-        for(int x = upperLeftX; x <= lowerRightX; x++)
+        for(int x = getUpperLeftX(); x <= getLowerRightX(); x++)
         {
-            g.plotPixel(x, y, color.R, color.G, color.B);
+            g.plotPixel(x, y, rectangleColor.R, rectangleColor.G, rectangleColor.B);
         }
     }
 }
