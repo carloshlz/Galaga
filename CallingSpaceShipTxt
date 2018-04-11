@@ -1,0 +1,9 @@
+    SpaceShipTexture spaceShip;
+    SDL_Rect* spriteArray[4];
+    spaceShip.setX(0);
+    spaceShip.setY(0);
+    spaceShip.setWidth(100);
+    spaceShip.setHeight(100);
+    spaceShip.setPicLoc(spriteArray[3]);
+    spaceShip.loadFromFile( "/Users/carloshlz/Desktop/SDL/SDL_Tutorial/SDL_Tutorial/dots.png" );
+    spaceShip.renderPic(350, 200, spriteArray[0]);
