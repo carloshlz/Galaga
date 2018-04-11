@@ -4,12 +4,13 @@
 #include "Point.h"
 #include "Color.h"
 #include "SDL_Plotter.h"
+#include "Projectile.h"
 #include <iostream>
 
 using namespace std;
 
 //Global Variable
-const double PI = 3.14159;
+const double PIE = 3.14159;
 
 class Sphere
 {
@@ -164,17 +165,31 @@ void Sphere::moveSphere(char direction)
 {
     switch (toupper(direction))
     {
-        case 'W':
-            setY(getY() - 5);
-            break;
-        case 'S':
-            setY(getY() + 5);
-            break;
+       // case 'W':
+            //setY(getY() - 5);
+            //break;
+       // case 'S':
+           // setY(getY() + 5);
+           // break;
         case 'A':
-            setX(getX() - 5);
+            if(getX() <= 5)
+            {
+              setX(getX());
+            }
+            else
+            {
+             setX(getX() - 5);
+            }
             break;
         case 'D':
+            if(getX() >= 695)
+            {
+              setX(getX());
+            }
+            else
+            {
             setX(getX() + 5);
+            }
             break;
     }
 }

@@ -8,6 +8,7 @@
 #include "Point.h"
 #include "Rectangle.h"
 #include "Projectile.h"
+#include <ctime>
 
 
 
@@ -99,13 +100,13 @@ int main(int argc, char ** argv)
 
     Rectangle laser;
 
-    laser.setUpperLeftX(0);
-    laser.setUpperLeftY(0);
+    laser.setUpperLeftX(345);
+    laser.setUpperLeftY(550);
 
-    laser.setLowerRightX(100);
-    laser.setLowerRightY(100);
+    laser.setLowerRightX(355);
+    laser.setLowerRightY(580);
 
-    laser.setColorRectangle(Color(200,200,200));
+    laser.setColorRectangle(Color(20,200,200));
 
 
     Color test;
@@ -122,13 +123,35 @@ int main(int argc, char ** argv)
     cout << endl;
     cout << "Please Enjoy!" << endl;
 
+
+    int count = 0;
+
     while (!g.getQuit())
     {
 		if(!stopped)
 		{
+      //cout << time << endl;
+     // count++;
 
 			ship.draw(g);
 			laser.drawRectangle(g);
+			int test1;
+
+			while(count < 100)
+      {
+        //test1 = laser.getUpperLeft();
+        //laser.setUpperLeftX(laser.getUpperLeft());
+        laser.setUpperLeftY(laser.getUpperLeftY() - 5);
+
+       // laser.setLowerRightX(laser.getLowerRightX());
+        laser.setLowerRightY(laser.getLowerRightY() - 5);
+
+        laser.drawRectangle(g);
+         g.update();
+         g.Sleep(1000);
+        //SDL_Delay( 2000 );
+        count++;
+      }
 
 
 

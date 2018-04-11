@@ -35,6 +35,7 @@ class Rectangle
       Rectangle(int UpperLeftX, int UpperLeftY, int LowerRightX, int LowerRightY);
 
       void drawRectangle(SDL_Plotter& r);
+      bool collision(Sphere& );
 };
 
 //Constructor
@@ -109,5 +110,20 @@ void Rectangle::drawRectangle(SDL_Plotter& g)
         }
     }
 }
+
+/*
+bool Rectangle::collision(Sphere& s)
+{
+  bool flag = false;
+  for()
+  {
+    for()
+    {
+      flag = true;
+    }
+  }
+  return flag;
+}
+*/
 
 #endif // RECTANGLE_H_INCLUDED
