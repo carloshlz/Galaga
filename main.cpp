@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 
 #include "SDL_Plotter.h"
@@ -21,19 +19,15 @@ and may not be redistributed without written permission.*/
 //Using SDL and standard IO
 #include <SDL.h>
 #include <stdio.h>
-
 //Screen dimension constants
 const int SCREEN_WIDTH = 700;
 const int SCREEN_HEIGHT = 700;
-
 int main( int argc, char* args[] )
 {
 	//The window we'll be rendering to
 	SDL_Window* window = NULL;
-
 	//The surface contained by the window
 	SDL_Surface* screenSurface = NULL;
-
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
@@ -53,24 +47,18 @@ int main( int argc, char* args[] )
 		{
 			//Get window surface
 			screenSurface = SDL_GetWindowSurface( window );
-
 			//Fill the surface white
 			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0,0,0)); //0xFF, 0xFF, 0xFF ) );
-
 			//Update the surface
 			SDL_UpdateWindowSurface( window );
-
 			//Wait two seconds
 			//SDL_Delay( 2000 );
 		}
 	}
-
 	//Destroy window
 	SDL_DestroyWindow( window );
-
 	//Quit SDL subsystems
 	SDL_Quit();
-
 	return 0;
 }
 */
@@ -91,12 +79,23 @@ int main(int argc, char ** argv)
     ship.setColor(Color(212, 20, 20));
     ship.setRadius(10);
 
+    /*
     Projectile missile;
 
     missile.setX(350);
     missile.setY(595);
     missile.setColor(Color(212, 20, 20));
     missile.setRadius(10);
+    */
+
+    /*
+    Rectangle black;
+    black.setUpperLeftX(1);
+    black.setUpperLeftY(1);
+    black.setLowerRightX(699);
+    black.setLowerRightY(699);
+    black.setColorRectangle(Color(0,0,0));
+    */
 
     Rectangle laser;
 
@@ -130,39 +129,60 @@ int main(int argc, char ** argv)
     {
 		if(!stopped)
 		{
+		  g.clear();
       //cout << time << endl;
      // count++;
+     // black.drawRectangle(g);
+
+     /*
+      g.getQuit(ship)
+      {
+        g.clear(ship);
+      }
+      */
 
 			ship.draw(g);
 			laser.drawRectangle(g);
 			int test1;
 
-			while(count < 100)
-      {
-        //test1 = laser.getUpperLeft();
-        //laser.setUpperLeftX(laser.getUpperLeft());
-        laser.setUpperLeftY(laser.getUpperLeftY() - 5);
+
+      laser.setUpperLeftY(laser.getUpperLeftY() - 5);
 
        // laser.setLowerRightX(laser.getLowerRightX());
         laser.setLowerRightY(laser.getLowerRightY() - 5);
 
         laser.drawRectangle(g);
          g.update();
-         g.Sleep(1000);
+         g.Sleep(100);
+			//while(count < 100)
+      //{
+        //test1 = laser.getUpperLeft();
+        //laser.setUpperLeftX(laser.getUpperLeft());
+       // laser.setUpperLeftY(laser.getUpperLeftY() - 5);
+
+       // laser.setLowerRightX(laser.getLowerRightX());
+       // laser.setLowerRightY(laser.getLowerRightY() - 5);
+
+       // laser.drawRectangle(g);
+        // g.update();
+         //g.Sleep(1000);
         //SDL_Delay( 2000 );
-        count++;
-      }
+       // count++;
+     // }
 
 
 
-char direction;
+char direction1, direction2;
 if(g.kbhit())
 {
   //cout << g.getKey() << endl;
 
-  ship.eraseSphere(g);
-  direction = g.getKey();
-  ship.moveSphere(direction);
+
+  //ship.eraseSphere(g);
+  direction1 = g.getKey();
+  ship.moveSphere(direction1);
+
+//  quit = ship.draw(g);
   ship.draw(g);
 
   /*
@@ -206,12 +226,25 @@ if(g.kbhit())
 
 
 		}
+/*
+        laser.setUpperLeftY(laser.getUpperLeftY() - 5);
 
-		if(g.kbhit()){
+       // laser.setLowerRightX(laser.getLowerRightX());
+        laser.setLowerRightY(laser.getLowerRightY() - 5);
+
+        laser.drawRectangle(g);
+         g.update();
+         g.Sleep(100);
+         */
+
+
+		if(g.kbhit())
+    {
 			g.getKey();
 		}
 
-		if(g.getMouseClick(x,y)){
+		if(g.getMouseClick(x,y))
+    {
 			stopped = !stopped;
 		}
 
@@ -219,4 +252,3 @@ if(g.kbhit())
     }
     return 0;
 }
-
