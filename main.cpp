@@ -1,11 +1,17 @@
+/*
+*  Authors: Peter Doe, Carlos Hernandez, Kevin Kulda, and Jon Patel.
+*/
+
 #include <iostream>
 #include "SDL_Plotter.h"
 #include "Color.h"
 #include "Sphere.h"
 #include "Point.h"
-
+#include "Rectangle.h"
+#include <ctime>
 
 using namespace std;
+
 
 int main(int argc, char ** argv)
 {
@@ -23,6 +29,31 @@ int main(int argc, char ** argv)
     ship.setColor(Color(212, 20, 20));
     ship.setRadius(10);
 
+    //RECTANGLE SHIP
+    Rectangle falcon;
+
+    falcon.setUpperLeftX(345);
+    falcon.setUpperLeftY(595);
+    falcon.setLowerRightX(355);
+    falcon.setLowerRightY(605);
+    falcon.setColorRectangle(Color(20,200,200));
+
+
+    Rectangle black;
+    black.setUpperLeftX(1);
+    black.setUpperLeftY(1);
+    black.setLowerRightX(699);
+    black.setLowerRightY(100);
+    black.setColorRectangle(Color(0,0,0));
+
+
+    Rectangle laser;
+    laser.setUpperLeftX(345);
+    laser.setUpperLeftY(550);
+    laser.setLowerRightX(355);
+    laser.setLowerRightY(580);
+    laser.setColorRectangle(Color(20,200,200));
+
     Color test;
 
     cout << "Created by Code::Masters" << endl;
@@ -37,53 +68,65 @@ int main(int argc, char ** argv)
     cout << endl;
     cout << "Please Enjoy!" << endl;
 
+
+    int count = 0;
+
     while (!g.getQuit())
     {
-		if(!stopped)
-		{
+        if(!stopped)
+        {
+            g.clear();
 
-			ship.draw(g);
+            black.drawRectangle(g);
+            ship.draw(g);
 
-char direction;
-if(g.kbhit())
-{
-  //cout << g.getKey() << endl;
-  ship.eraseSphere(g);
-  direction = g.getKey();
-  ship.moveSphere(direction);
-  ship.draw(g);
-
-
-//cout << ship.getX() << " " << ship.getY() << endl;
-
-
-}
+            if(black.collision(laser))
+            {
+              //cout << "Has been hit" << endl;
+            }
+            else
+            {
+              laser.drawRectangle(g);
+              //g.Sleep(100);
+            }
 
 
+            falcon.drawRectangle(g);
 
-			/*
-			for(xd = 0; xd < 10 && x + xd < g.getCol(); xd++ ){
-				for(yd = 0; yd < 10 && y + yd < g.getRow(); yd++ ){
-					if(colored){
-						g.plotPixel( x + xd, y + yd, R, G, B);
-					}
-					else{
-					    g.plotPixel( x + xd, y + yd, 990, G, 990);
-					}
-				}
-			}
-			*/
-		}
+            laser.setUpperLeftY(laser.getUpperLeftY() - 1);
+            laser.setLowerRightY(laser.getLowerRightY() - 1);
+            //laser.drawRectangle(g);
+            g.update();
+            //g.Sleep(10);
 
-		if(g.kbhit()){
-			g.getKey();
-		}
 
-		if(g.getMouseClick(x,y)){
-			stopped = !stopped;
-		}
 
-		g.update();
+            char direction1;
+            if(g.kbhit())
+            {
+
+              direction1 = g.getKey();
+                /*
+                ship.moveSphere(direction1);
+                ship.draw(g);
+                */
+              falcon.moveRectangle(direction1);
+              falcon.drawRectangle(g);
+            }
+          }
+
+          if(g.kbhit())
+          {
+            g.getKey();
+          }
+
+          if(g.getMouseClick(x,y))
+          {
+            stopped = !stopped;
+          }
+
+          g.update();
     }
+
     return 0;
 }

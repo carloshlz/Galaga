@@ -3,6 +3,7 @@
 
 #include "Color.h"
 #include "SDL_Plotter.h"
+#include "Point.h"
 #include <iostream>
 using namespace std;
 
@@ -36,15 +37,18 @@ class Rectangle
 
       void drawRectangle(SDL_Plotter& r);
       bool collision(Sphere& );
+      void moveRectangle(char direction);
+      bool collision(Rectangle& );
 };
+
 
 //Constructor
 Rectangle::Rectangle()
 {
-    UpperLeftX = 0;
-    UpperLeftY = 0;
-    LowerRightX = 0;
-    LowerRightY = 0;
+    UpperLeftX = 2;
+    UpperLeftY = 2;
+    LowerRightX = 1;
+    LowerRightY = 1;
     Color rectangleColor = Color(200,200,200);
 
 }
@@ -111,19 +115,49 @@ void Rectangle::drawRectangle(SDL_Plotter& g)
     }
 }
 
-/*
-bool Rectangle::collision(Sphere& s)
+void Rectangle::moveRectangle(char direction)
 {
-  bool flag = false;
-  for()
-  {
-    for()
+    switch (toupper(direction))
     {
-      flag = true;
+        case 'A':
+            if(getUpperLeftX() == 0)
+            {
+                setUpperLeftX(getUpperLeftX());
+                setLowerRightX(getLowerRightX());
+            }
+            else
+            {
+                setUpperLeftX(getUpperLeftX() - 5);
+                setLowerRightX(getLowerRightX() - 5);
+            }
+            break;
+        case 'D':
+            if(getLowerRightX() == 700)
+            {
+                setLowerRightX(getLowerRightX());
+                setUpperLeftX(getUpperLeftX());
+            }
+            else
+            {
+                setLowerRightX(getLowerRightX() + 5);
+                setUpperLeftX(getUpperLeftX() + 5);
+            }
+            break;
     }
-  }
-  return flag;
 }
-*/
+
+
+bool Rectangle::collision(Rectangle& laser)
+{
+    bool isCollision = false;
+
+    if(getLowerRightY() >= laser.getUpperLeftY())
+    {
+      isCollision = true;
+    }
+
+  return isCollision;
+}
+
 
 #endif // RECTANGLE_H_INCLUDED
