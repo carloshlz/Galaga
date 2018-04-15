@@ -1,20 +1,11 @@
-/*
-*  Authors: Peter Doe, Carlos Hernandez, Kevin Kulda, and Jon Patel.
-*/
-
 #include <iostream>
 #include "SDL_Plotter.h"
 #include "Color.h"
 #include "Sphere.h"
 #include "Point.h"
-#include "SHIP.H"
-#include "Rectangle.h"
-#include "Rectangle2.h"
-#include "Projectile.h"
-#include <ctime>
+
 
 using namespace std;
-
 
 int main(int argc, char ** argv)
 {
@@ -25,60 +16,12 @@ int main(int argc, char ** argv)
     int x,y;
     int R,G,B;
 
-    Sphere ship, shipRect;
+    Sphere ship;
 
     ship.setX(350);
     ship.setY(600);
     ship.setColor(Color(212, 20, 20));
     ship.setRadius(10);
-
-    //RECTANGLE SHIP
-    Ship falcon;
-
-    falcon.setUpperLeftX(345);
-    falcon.setUpperLeftY(595);
-    falcon.setLowerRightX(355);
-    falcon.setLowerRightY(605);
-
-    falcon.setColorRectangle(Color(20,200,200));
-
-    //TEST
-    shipRect.setUpperLeftX(345);
-    shipRect.setUpperLeftY(595);
-
-    shipRect.setLowerRightX(355);
-    shipRect.setLowerRightY(605);
-
-    shipRect.setColorRectangle(Color(20,200,200));
-
-    /*
-    Projectile missile;
-
-    missile.setX(350);
-    missile.setY(595);
-    missile.setColor(Color(212, 20, 20));
-    missile.setRadius(10);
-    */
-
-    /*
-    Rectangle black;
-    black.setUpperLeftX(1);
-    black.setUpperLeftY(1);
-    black.setLowerRightX(699);
-    black.setLowerRightY(699);
-    black.setColorRectangle(Color(0,0,0));
-    */
-
-    Rectangle laser;
-
-    laser.setUpperLeftX(345);
-    laser.setUpperLeftY(550);
-
-    laser.setLowerRightX(355);
-    laser.setLowerRightY(580);
-
-    laser.setColorRectangle(Color(20,200,200));
-
 
     Color test;
 
@@ -94,57 +37,49 @@ int main(int argc, char ** argv)
     cout << endl;
     cout << "Please Enjoy!" << endl;
 
-
-    int count = 0;
-
     while (!g.getQuit())
     {
 		if(!stopped)
 		{
-		  g.clear();
 
-			//ship.draw(g);
-			shipRect.drawSphereRect(g);
-			laser.drawRectangle(g);
-			int test1;
+			ship.draw(g);
 
-
-      laser.setUpperLeftY(laser.getUpperLeftY() - 5);
-
-        laser.setLowerRightY(laser.getLowerRightY() - 5);
-
-        laser.drawRectangle(g);
-         g.update();
-         g.Sleep(100);
-
-
-char direction1, direction2;
+char direction;
 if(g.kbhit())
 {
+  //cout << g.getKey() << endl;
+  ship.eraseSphere(g);
+  direction = g.getKey();
+  ship.moveSphere(direction);
+  ship.draw(g);
 
-  direction1 = g.getKey();
-  //ship.moveSphere(direction1);
-  shipRect.moveSphere(direction1);
 
-  //ship.draw(g);
-  shipRect.drawSphereRect(g);
-
+//cout << ship.getX() << " " << ship.getY() << endl;
 
 
 }
 
 
 
+			/*
+			for(xd = 0; xd < 10 && x + xd < g.getCol(); xd++ ){
+				for(yd = 0; yd < 10 && y + yd < g.getRow(); yd++ ){
+					if(colored){
+						g.plotPixel( x + xd, y + yd, R, G, B);
+					}
+					else{
+					    g.plotPixel( x + xd, y + yd, 990, G, 990);
+					}
+				}
+			}
+			*/
 		}
 
-
-		if(g.kbhit())
-    {
+		if(g.kbhit()){
 			g.getKey();
 		}
 
-		if(g.getMouseClick(x,y))
-    {
+		if(g.getMouseClick(x,y)){
 			stopped = !stopped;
 		}
 
