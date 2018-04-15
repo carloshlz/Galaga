@@ -1,67 +1,20 @@
-#include <iostream>
+/*
+*  Authors: Peter Doe, Carlos Hernandez, Kevin Kulda, and Jon Patel.
+*/
 
+#include <iostream>
 #include "SDL_Plotter.h"
 #include "Color.h"
 #include "Sphere.h"
 #include "Point.h"
+#include "SHIP.H"
 #include "Rectangle.h"
+#include "Rectangle2.h"
 #include "Projectile.h"
 #include <ctime>
 
-
-
 using namespace std;
 
-
-/*This source code copyrighted by Lazy Foo' Productions (2004-2015)
-and may not be redistributed without written permission.*/
-/*
-//Using SDL and standard IO
-#include <SDL.h>
-#include <stdio.h>
-//Screen dimension constants
-const int SCREEN_WIDTH = 700;
-const int SCREEN_HEIGHT = 700;
-int main( int argc, char* args[] )
-{
-	//The window we'll be rendering to
-	SDL_Window* window = NULL;
-	//The surface contained by the window
-	SDL_Surface* screenSurface = NULL;
-	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-	{
-		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-	}
-	else
-	{
-		//Create window
-		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED,
-                                SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                                SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( window == NULL )
-		{
-			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-		}
-		else
-		{
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface( window );
-			//Fill the surface white
-			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0,0,0)); //0xFF, 0xFF, 0xFF ) );
-			//Update the surface
-			SDL_UpdateWindowSurface( window );
-			//Wait two seconds
-			//SDL_Delay( 2000 );
-		}
-	}
-	//Destroy window
-	SDL_DestroyWindow( window );
-	//Quit SDL subsystems
-	SDL_Quit();
-	return 0;
-}
-*/
 
 int main(int argc, char ** argv)
 {
@@ -72,12 +25,31 @@ int main(int argc, char ** argv)
     int x,y;
     int R,G,B;
 
-    Sphere ship;
+    Sphere ship, shipRect;
 
     ship.setX(350);
     ship.setY(600);
     ship.setColor(Color(212, 20, 20));
     ship.setRadius(10);
+
+    //RECTANGLE SHIP
+    Ship falcon;
+
+    falcon.setUpperLeftX(345);
+    falcon.setUpperLeftY(595);
+    falcon.setLowerRightX(355);
+    falcon.setLowerRightY(605);
+
+    falcon.setColorRectangle(Color(20,200,200));
+
+    //TEST
+    shipRect.setUpperLeftX(345);
+    shipRect.setUpperLeftY(595);
+
+    shipRect.setLowerRightX(355);
+    shipRect.setLowerRightY(605);
+
+    shipRect.setColorRectangle(Color(20,200,200));
 
     /*
     Projectile missile;
@@ -130,112 +102,40 @@ int main(int argc, char ** argv)
 		if(!stopped)
 		{
 		  g.clear();
-      //cout << time << endl;
-     // count++;
-     // black.drawRectangle(g);
 
-     /*
-      g.getQuit(ship)
-      {
-        g.clear(ship);
-      }
-      */
-
-			ship.draw(g);
+			//ship.draw(g);
+			shipRect.drawSphereRect(g);
 			laser.drawRectangle(g);
 			int test1;
 
 
       laser.setUpperLeftY(laser.getUpperLeftY() - 5);
 
-       // laser.setLowerRightX(laser.getLowerRightX());
         laser.setLowerRightY(laser.getLowerRightY() - 5);
 
         laser.drawRectangle(g);
          g.update();
          g.Sleep(100);
-			//while(count < 100)
-      //{
-        //test1 = laser.getUpperLeft();
-        //laser.setUpperLeftX(laser.getUpperLeft());
-       // laser.setUpperLeftY(laser.getUpperLeftY() - 5);
-
-       // laser.setLowerRightX(laser.getLowerRightX());
-       // laser.setLowerRightY(laser.getLowerRightY() - 5);
-
-       // laser.drawRectangle(g);
-        // g.update();
-         //g.Sleep(1000);
-        //SDL_Delay( 2000 );
-       // count++;
-     // }
-
 
 
 char direction1, direction2;
 if(g.kbhit())
 {
-  //cout << g.getKey() << endl;
 
-
-  //ship.eraseSphere(g);
   direction1 = g.getKey();
-  ship.moveSphere(direction1);
+  //ship.moveSphere(direction1);
+  shipRect.moveSphere(direction1);
 
-//  quit = ship.draw(g);
-  ship.draw(g);
+  //ship.draw(g);
+  shipRect.drawSphereRect(g);
 
-  /*
-  if(g.getKey() == 'M')
-  {
-    missile.draw(g);
-    while (missile.getY() > 5)
-    {
-      missile.setY(missile.getY() - 5);
-    }
-    */
-   // while(missile.getY() < 700)
-   // {
-    //  missile.moveProjectile();
-   //   missile.eraseProjectile(g);
-   // }
-  //}
-
-
-
-
-//cout << ship.getX() << " " << ship.getY() << endl;
 
 
 }
 
 
 
-			/*
-			for(xd = 0; xd < 10 && x + xd < g.getCol(); xd++ ){
-				for(yd = 0; yd < 10 && y + yd < g.getRow(); yd++ ){
-					if(colored){
-						g.plotPixel( x + xd, y + yd, R, G, B);
-					}
-					else{
-					    g.plotPixel( x + xd, y + yd, 990, G, 990);
-					}
-				}
-			}
-			*/
-
-
 		}
-/*
-        laser.setUpperLeftY(laser.getUpperLeftY() - 5);
-
-       // laser.setLowerRightX(laser.getLowerRightX());
-        laser.setLowerRightY(laser.getLowerRightY() - 5);
-
-        laser.drawRectangle(g);
-         g.update();
-         g.Sleep(100);
-         */
 
 
 		if(g.kbhit())
