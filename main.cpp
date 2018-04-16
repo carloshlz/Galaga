@@ -23,6 +23,11 @@ int main(int argc, char ** argv)
     int R,G,B;
     bool moveLaser = false;
 
+    Color white;
+    white.R = 255;
+    white.G = 255;
+    white.B = 255;
+
     Sphere ship;
 
     ship.setX(350);
@@ -41,13 +46,21 @@ int main(int argc, char ** argv)
 
 
     Rectangle black;
+    black.setUpperLeftX(100);
+    black.setUpperLeftY(100);
+    black.setLowerRightX(600);
+    black.setLowerRightY(150);
+    black.setColorRectangle(Color(0,0,0));
+
+    /*
+    Rectangle top;
     black.setUpperLeftX(1);
     black.setUpperLeftY(1);
     black.setLowerRightX(699);
-    black.setLowerRightY(100);
-    black.setColorRectangle(Color(0,0,0));
+    black.setLowerRightY(10);
+    black.setColorRectangle(Color(255,255,255));
 
-
+    */
     Rectangle laser;
     laser.setUpperLeftX(345);
     laser.setUpperLeftY(550);
@@ -74,16 +87,52 @@ int main(int argc, char ** argv)
 
     while (!g.getQuit())
     {
+
+        char direction1;
+
+        if(g.kbhit())
+        {
+
+          direction1 = g.getKey();
+            /*
+            ship.moveSphere(direction1);
+            ship.draw(g);
+            */
+          falcon.moveRectangle(direction1);
+
+
+          falcon.drawRectangle(g);
+
+          if(direction1 == 'G' || direction1 == 'g')
+          {
+            moveLaser = true;
+            cout << direction1 << " " << moveLaser << endl;
+          }
+
+          if(!moveLaser)
+          {
+            laser.moveRectangle(direction1);
+            cout <<"Shot move once";
+          }
+        }
+
         if(!stopped)
         {
             g.clear();
 
+            //top.drawRectangle(g);
+
             black.drawRectangle(g);
             ship.draw(g);
 
+            //if(top.collision(laser))
+            //{
+            //  laser.setColorRectangle(white);
+            //}
+
             if(black.collision(laser))
             {
-              //cout << "Has been hit" << endl;
+              black.setColorRectangle(white);
             }
             else if(moveLaser)
             {
@@ -94,6 +143,8 @@ int main(int argc, char ** argv)
 
               //g.Sleep(100);
             }
+
+
 
 
 
@@ -126,29 +177,6 @@ int main(int argc, char ** argv)
             //laser.drawRectangle(g);
             g.update();
             //g.Sleep(10);
-
-
-
-            char direction1;
-            if(g.kbhit())
-            {
-
-              direction1 = g.getKey();
-                /*
-                ship.moveSphere(direction1);
-                ship.draw(g);
-                */
-              falcon.moveRectangle(direction1);
-              laser.moveRectangle(direction1);
-
-              falcon.drawRectangle(g);
-
-              if(direction1 == 'G' || direction1 == 'g')
-              {
-                moveLaser = true;
-                cout << direction1 << " " << moveLaser << endl;
-              }
-            }
 
           }
 
