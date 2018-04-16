@@ -21,6 +21,7 @@ int main(int argc, char ** argv)
     //bool colored = false;
     int x,y;
     int R,G,B;
+    bool moveLaser = false;
 
     Sphere ship;
 
@@ -84,17 +85,44 @@ int main(int argc, char ** argv)
             {
               //cout << "Has been hit" << endl;
             }
-            else
+            else if(moveLaser)
             {
+              //Laser laser(ship);
               laser.drawRectangle(g);
+              laser.setUpperLeftY(laser.getUpperLeftY() - 1);
+              laser.setLowerRightY(laser.getLowerRightY() - 1);
+
               //g.Sleep(100);
             }
 
 
-            falcon.drawRectangle(g);
 
+            falcon.drawRectangle(g);
+            /*
+            if(moveLaser)
+            {
             laser.setUpperLeftY(laser.getUpperLeftY() - 1);
             laser.setLowerRightY(laser.getLowerRightY() - 1);
+            laser.drawRectangle(g);
+            }
+            */
+            /*
+            int x = 0, y = 0;
+            if(g.getKey() == 'G')
+            {
+              while(!g.getQuit())
+              {
+                  laser.setUpperLeftY(laser.getUpperLeftY() - 1);
+                  laser.setLowerRightY(laser.getLowerRightY() - 1);
+                  laser.drawRectangle(g);
+                  g.update();
+                  g.clear();
+                  cout << "LOOP READ";
+              }
+            }
+            */
+
+
             //laser.drawRectangle(g);
             g.update();
             //g.Sleep(10);
@@ -111,8 +139,17 @@ int main(int argc, char ** argv)
                 ship.draw(g);
                 */
               falcon.moveRectangle(direction1);
+              laser.moveRectangle(direction1);
+
               falcon.drawRectangle(g);
+
+              if(direction1 == 'G' || direction1 == 'g')
+              {
+                moveLaser = true;
+                cout << direction1 << " " << moveLaser << endl;
+              }
             }
+
           }
 
           if(g.kbhit())

@@ -34,6 +34,7 @@ class Rectangle
       //Constructor
       Rectangle();
       Rectangle(int UpperLeftX, int UpperLeftY, int LowerRightX, int LowerRightY);
+      Rectangle(Rectangle& other);
 
       void drawRectangle(SDL_Plotter& r);
       bool collision(Sphere& );
@@ -52,6 +53,16 @@ Rectangle::Rectangle()
     Color rectangleColor = Color(200,200,200);
 
 }
+
+Rectangle::Rectangle(Rectangle& other)
+{
+    UpperLeftX = other.getUpperLeftX();
+    UpperLeftY = 550;
+    LowerRightX = other.getLowerRightX();
+    LowerRightY = 580;
+    Color rectangleColor = Color(200,200,200);
+}
+
 
 Rectangle::Rectangle(int ULX, int ULY, int LRX, int LLY)
 {
