@@ -30,6 +30,9 @@ class Rectangle
       int getUpperLeftY();
       int getLowerRightX();
       int getLowerRightY();
+      int getColorRed();
+      int getColorGreen();
+      int getColorBlue();
 
       //Constructor
       Rectangle();
@@ -114,6 +117,22 @@ int Rectangle::getLowerRightY()
 {
     return LowerRightY;
 }
+
+int Rectangle::getColorRed()
+{
+    return rectangleColor.R;
+}
+
+int Rectangle::getColorGreen()
+{
+    return rectangleColor.G;
+}
+
+int Rectangle::getColorBlue()
+{
+    return rectangleColor.B;
+}
+
 
 void Rectangle::drawRectangle(SDL_Plotter& g)
 {
