@@ -8,13 +8,33 @@
 #include "Sphere.h"
 #include "Point.h"
 #include "Rectangle.h"
+#include "SDL_Stuff.h"
 #include <ctime>
 
 using namespace std;
 
+      void setTrue(bool test[], int i);
+      void setfalse(bool test[], int i);
 
 int main(int argc, char ** argv)
 {
+
+    cout << "Created by Code::Masters" << endl;
+    cout << "Peter Doe, Carlos Hernandez, Kevin Kulda, and John Patel" << endl;
+    cout << "Dr. Fendt (Professor)" << endl;
+    cout << "CSI 1430: MWF 11:15 - 12:05" << endl;
+    cout << endl;
+    cout << "*************************************************" << endl;
+    cout << "Please use the \"w\",\"a\",\"s\" and \"d\" keys to move the" << endl;
+    cout << "ship, and the \"g\" key to shoot a laser." << endl;
+    cout << "*************************************************" << endl;
+    cout << endl;
+    cout << "Please Enjoy!" << endl;
+
+
+
+
+    //cout << SDL_GetTicks() << endl;
 
     SDL_Plotter g(700, 700);
     bool stopped = false;
@@ -23,6 +43,7 @@ int main(int argc, char ** argv)
     int R,G,B;
     bool moveLaser = false;
 
+    //A default color.
     Color white;
     white.R = 255;
     white.G = 255;
@@ -47,7 +68,7 @@ int main(int argc, char ** argv)
 
     Rectangle black;
     black.setUpperLeftX(100);
-    black.setUpperLeftY(100);
+    black.setUpperLeftY(100);   cout << SDL_GetTicks() << endl;
     black.setLowerRightX(600);
     black.setLowerRightY(150);
     black.setColorRectangle(Color(0,0,0));
@@ -61,6 +82,7 @@ int main(int argc, char ** argv)
     black.setColorRectangle(Color(255,255,255));
 
     */
+
     Rectangle laser;
     laser.setUpperLeftX(345);
     laser.setUpperLeftY(550);
@@ -68,130 +90,198 @@ int main(int argc, char ** argv)
     laser.setLowerRightY(580);
     laser.setColorRectangle(Color(20,200,200));
 
+
     Color test;
 
-    cout << "Created by Code::Masters" << endl;
-    cout << "Peter Doe, Carlos Hernandez, Kevin Kulda, and John Patel" << endl;
-    cout << "Dr. Fendt (Professor)" << endl;
-    cout << "CSI 1430: MWF 11:15 - 12:05" << endl;
-    cout << endl;
-    cout << "*************************************************" << endl;
-    cout << "Please use the \"w\",\"a\",\"s\" and \"d\" keys" << endl;
-    cout << "to move the object on the screen." << endl;
-    cout << "*************************************************" << endl;
-    cout << endl;
-    cout << "Please Enjoy!" << endl;
+    //Projectile Array.
+    Rectangle lead[10];
+
+    for(int a = 0; a < 10; a++)
+    {
+      lead[a].setUpperLeftX(345);
+      lead[a].setUpperLeftY(550);
+      lead[a].setLowerRightX(355);
+      lead[a].setLowerRightY(580);
+      lead[a].setColorRectangle(Color(20,200,200));
+    }
+    bool firing[10];
+    for(int b = 0; b < 10; b++)
+    {
+      firing[b] = false;
+    }
+
+        //enemy Array.
+    Rectangle enemy[10];
+      int upperX = 20;
+      int upperY = 10;
+      int lowerX = 70;
+      int lowerY = 60;
+    for(int a = 0; a < 10; a++)
+    {
+
+      enemy[a].setUpperLeftX(upperX);
+      enemy[a].setUpperLeftY(upperY);
+      enemy[a].setLowerRightX(lowerX);
+      enemy[a].setLowerRightY(lowerY);
+      enemy[a].setColorRectangle(Color(255,0,0));
+
+      upperX += 60;
+      lowerX += 60;
+
+    }
+
+    bool surviving[10];
+    for(int b = 0; b < 10; b++)
+    {
+      surviving[b] = true;
+    }
 
 
     int count = 0;
+    char direction1;
+    int i;
+    bool plotEnemy = true;
 
+    //While the program is running.
     while (!g.getQuit())
     {
 
-        char direction1;
-
-        if(g.kbhit())
-        {
-
-          direction1 = g.getKey();
-            /*
-            ship.moveSphere(direction1);
-            ship.draw(g);
-            */
-          falcon.moveRectangle(direction1);
-
-
-          falcon.drawRectangle(g);
-
-          if(direction1 == 'G' || direction1 == 'g')
-          {
-            moveLaser = true;
-            cout << direction1 << " " << moveLaser << endl;
-          }
-
-          if(!moveLaser)
-          {
-            laser.moveRectangle(direction1);
-            cout <<"Shot move once";
-          }
-        }
-
-        if(!stopped)
-        {
+      //While the game has not been stopped.
+      if(!stopped)
+      {
+            //Clear the screen.
             g.clear();
+            falcon.drawRectangle(g);  //Redraw the ship
 
-            //top.drawRectangle(g);
 
-            black.drawRectangle(g);
-            ship.draw(g);
 
-            //if(top.collision(laser))
-            //{
-            //  laser.setColorRectangle(white);
-            //}
-
-            if(black.collision(laser))
+            //When a button is pressed.
+            if(g.kbhit())
             {
-              black.setColorRectangle(white);
-            }
-            else if(moveLaser)
-            {
-              //Laser laser(ship);
-              laser.drawRectangle(g);
-              laser.setUpperLeftY(laser.getUpperLeftY() - 1);
-              laser.setLowerRightY(laser.getLowerRightY() - 1);
+               // cout << SDL_GetTicks() << endl;
 
-              //g.Sleep(100);
-            }
+                direction1 = g.getKey();
 
+                switch (toupper(direction1))
+                {
+                    case 'A': falcon.moveRectangle('A');
+                        break;
+                    case 'D': falcon.moveRectangle('D');
+                        break;
+                    case 'G':
+                          i = 0;
 
+                          while( i < 10 )
+                          {
+                              if(firing[i] == false)
+                              {
 
+                                lead[i].setUpperLeftX(falcon.getUpperLeftX());
+                                lead[i].setLowerRightX(falcon.getLowerRightX());
+                                lead[i].setUpperLeftY(550);
+                                lead[i].setLowerRightY(580);
 
+                                setTrue(firing, i);
 
-            falcon.drawRectangle(g);
-            /*
-            if(moveLaser)
-            {
-            laser.setUpperLeftY(laser.getUpperLeftY() - 1);
-            laser.setLowerRightY(laser.getLowerRightY() - 1);
-            laser.drawRectangle(g);
-            }
-            */
-            /*
-            int x = 0, y = 0;
-            if(g.getKey() == 'G')
-            {
-              while(!g.getQuit())
-              {
-                  laser.setUpperLeftY(laser.getUpperLeftY() - 1);
-                  laser.setLowerRightY(laser.getLowerRightY() - 1);
-                  laser.drawRectangle(g);
-                  g.update();
-                  g.clear();
-                  cout << "LOOP READ";
+                                i = 10;
+                              }
+                              i++;
+                          }
+
+                      break;
+                  }
+
+                falcon.moveRectangle(direction1); //Move ship based on key pressed.
+                falcon.drawRectangle(g);  //Redraw the ship
+
               }
-            }
-            */
+
+              for(int d = 0; d < 10; d++)
+              {
+                if(firing[d] == true)
+                {
+                    if(lead[d].getUpperLeftY() < 5)
+                    {
+                      setfalse(firing, d);
+                    }
+                    else
+                    {
+                      lead[d].drawRectangle(g);
+                      lead[d].moveLaserUp(g);
+                    }
+                }
+              }
+
+              for(int h = 0; h < 10 ; h++)
+              {
+                if(surviving[h])
+                {
+                  for(int m = 0; m < 10; m++)
+                  {
+                      if(firing[m])
+                    {
+                          if(enemy[h].enemyCollision(lead, m))
+                          {
+                            surviving[h] = false;
+                            firing[m] = false;
+                          }
+                    }
+                  }
+                }
+              }
 
 
-            //laser.drawRectangle(g);
-            g.update();
-            //g.Sleep(10);
+              falcon.drawRectangle(g);
 
-          }
 
-          if(g.kbhit())
-          {
-            g.getKey();
-          }
+              if(g.kbhit())
+              {
+                g.getKey();
+              }
 
-          if(g.getMouseClick(x,y))
-          {
-            stopped = !stopped;
-          }
+              if(g.getMouseClick(x,y))
+              {
+                stopped = !stopped;
+              }
 
-          g.update();
+              if(plotEnemy)
+              {
+                //g.Sleep(1000);
+
+                  for(int f = 0; f < 10; f++)
+                    {
+                      enemy[f].drawRectangle(g);
+                      surviving[f] == true;
+                    }
+                plotEnemy = false;
+              }
+
+
+
+              for(int f = 0; f < 10; f++)
+              {
+                if(surviving[f] == true)
+                {
+                  enemy[f].drawRectangle(g);
+                }
+              }
+
+              //g.Sleep(10);
+              g.update();
+    }
     }
 
     return 0;
 }
+
+
+void setTrue(bool test[], int i)
+{
+  test[i] = true;
+}
+
+void setfalse(bool test[], int i)
+{
+  test[i] = false;
+}
+

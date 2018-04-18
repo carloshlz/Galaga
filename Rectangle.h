@@ -30,9 +30,6 @@ class Rectangle
       int getUpperLeftY();
       int getLowerRightX();
       int getLowerRightY();
-      int getColorRed();
-      int getColorGreen();
-      int getColorBlue();
 
       //Constructor
       Rectangle();
@@ -43,6 +40,12 @@ class Rectangle
       bool collision(Sphere& );
       void moveRectangle(char direction);
       bool collision(Rectangle& );
+      void drawLaser(SDL_Plotter& g, int , int );
+      void moveLaserUp(SDL_Plotter& g);
+      ~Rectangle();
+      bool enemyCollision(Rectangle laser[], int m);
+
+
 };
 
 
@@ -118,22 +121,6 @@ int Rectangle::getLowerRightY()
     return LowerRightY;
 }
 
-int Rectangle::getColorRed()
-{
-    return rectangleColor.R;
-}
-
-int Rectangle::getColorGreen()
-{
-    return rectangleColor.G;
-}
-
-int Rectangle::getColorBlue()
-{
-    return rectangleColor.B;
-}
-
-
 void Rectangle::drawRectangle(SDL_Plotter& g)
 {
     for(int y = getUpperLeftY(); y <= getLowerRightY(); y++)
@@ -188,6 +175,43 @@ bool Rectangle::collision(Rectangle& laser)
 
   return isCollision;
 }
+
+//TEST Kevin
+void Rectangle::drawLaser(SDL_Plotter& g, int falconLeftX , int falconRightX)
+{
+    for(int y = 585; y <= 595; y++)
+    {
+        for(int x = falconLeftX; x <= falconLeftX; x++)
+        {
+            g.plotPixel(x, y, rectangleColor.R, rectangleColor.G, rectangleColor.B);
+        }
+    }
+}
+
+
+void Rectangle::moveLaserUp(SDL_Plotter& g)
+{
+    setUpperLeftY(getUpperLeftY() - 1);
+    setLowerRightY(getLowerRightY() - 1);
+}
+
+Rectangle::~Rectangle()
+{
+
+}
+
+bool Rectangle::enemyCollision(Rectangle laser[], int m)
+{
+    bool isCollision = false;
+
+            if( (laser[m].getUpperLeftY() <= getLowerRightY() && (laser[m].getUpperLeftX() <= getLowerRightX() && laser[m].getLowerRightX() >= getUpperLeftX()) )) // ||
+                //(laser.getUpperLeftY() <= getLowerRightY() && (laser.getUpperLeftX() <= getLowerRightX() && laser.getLowerRightX() >= getUpperLeftX())))
+            {
+              isCollision = true;
+            }
+  return isCollision;
+}
+
 
 
 #endif // RECTANGLE_H_INCLUDED
