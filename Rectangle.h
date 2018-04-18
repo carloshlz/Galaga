@@ -10,42 +10,42 @@ using namespace std;
 class Rectangle
 {
     //Public data
-    private:
-      int UpperLeftX;
-      int UpperLeftY;
-      int LowerRightX;
-      int LowerRightY;
-      Color rectangleColor;
-
-    public:
-      //Setter
-      void setUpperLeftX(int);
-      void setUpperLeftY(int);
-      void setLowerRightX(int);
-      void setLowerRightY(int);
-      void setColorRectangle(const Color&);
-
-      //Getter
-      int getUpperLeftX();
-      int getUpperLeftY();
-      int getLowerRightX();
-      int getLowerRightY();
-
-      //Constructor
-      Rectangle();
-      Rectangle(int UpperLeftX, int UpperLeftY, int LowerRightX, int LowerRightY);
-      Rectangle(Rectangle& other);
-
-      void drawRectangle(SDL_Plotter& r);
-      bool collision(Sphere& );
-      void moveRectangle(char direction);
-      bool collision(Rectangle& );
-      void drawLaser(SDL_Plotter& g, int , int );
-      void moveLaserUp(SDL_Plotter& g);
-      ~Rectangle();
-      bool enemyCollision(Rectangle laser[], int m);
-
-
+private:
+    int UpperLeftX;
+    int UpperLeftY;
+    int LowerRightX;
+    int LowerRightY;
+    Color rectangleColor;
+    
+public:
+    //Setter
+    void setUpperLeftX(int);
+    void setUpperLeftY(int);
+    void setLowerRightX(int);
+    void setLowerRightY(int);
+    void setColorRectangle(const Color&);
+    
+    //Getter
+    int getUpperLeftX();
+    int getUpperLeftY();
+    int getLowerRightX();
+    int getLowerRightY();
+    
+    //Constructor
+    Rectangle();
+    Rectangle(int UpperLeftX, int UpperLeftY, int LowerRightX, int LowerRightY);
+    Rectangle(Rectangle& other);
+    
+    void drawRectangle(SDL_Plotter& r);
+    bool collision(Sphere& );
+    void moveRectangle(char direction);
+    bool collision(Rectangle& );
+    void drawLaser(SDL_Plotter& g, int , int );
+    void moveLaserUp(SDL_Plotter& g);
+    ~Rectangle();
+    bool enemyCollision(Rectangle laser[], int m);
+    
+    
 };
 
 
@@ -57,7 +57,7 @@ Rectangle::Rectangle()
     LowerRightX = 1;
     LowerRightY = 1;
     Color rectangleColor = Color(200,200,200);
-
+    
 }
 
 Rectangle::Rectangle(Rectangle& other)
@@ -167,13 +167,13 @@ void Rectangle::moveRectangle(char direction)
 bool Rectangle::collision(Rectangle& laser)
 {
     bool isCollision = false;
-
+    
     if(getLowerRightY() >= laser.getUpperLeftY())
     {
-      isCollision = true;
+        isCollision = true;
     }
-
-  return isCollision;
+    
+    return isCollision;
 }
 
 //TEST Kevin
@@ -197,19 +197,19 @@ void Rectangle::moveLaserUp(SDL_Plotter& g)
 
 Rectangle::~Rectangle()
 {
-
+    
 }
 
 bool Rectangle::enemyCollision(Rectangle laser[], int m)
 {
     bool isCollision = false;
-
-            if( (laser[m].getUpperLeftY() <= getLowerRightY() && (laser[m].getUpperLeftX() <= getLowerRightX() && laser[m].getLowerRightX() >= getUpperLeftX()) )) // ||
-                //(laser.getUpperLeftY() <= getLowerRightY() && (laser.getUpperLeftX() <= getLowerRightX() && laser.getLowerRightX() >= getUpperLeftX())))
-            {
-              isCollision = true;
-            }
-  return isCollision;
+    
+    if( (laser[m].getUpperLeftY() <= getLowerRightY() && (laser[m].getUpperLeftX() <= getLowerRightX() && laser[m].getLowerRightX() >= getUpperLeftX()) )) // ||
+        //(laser.getUpperLeftY() <= getLowerRightY() && (laser.getUpperLeftX() <= getLowerRightX() && laser.getLowerRightX() >= getUpperLeftX())))
+    {
+        isCollision = true;
+    }
+    return isCollision;
 }
 
 
