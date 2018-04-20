@@ -7,6 +7,8 @@
 #include <iostream>
 using namespace std;
 
+const int INTRO_MOVE_INCREMENT = 1;
+
 class Rectangle
 {
     //Public data
@@ -16,8 +18,8 @@ private:
     int LowerRightX;
     int LowerRightY;
     Color rectangleColor;
-    bool firing;
     bool surviving;
+    Point home;
     
 public:
     //Setter
@@ -26,16 +28,14 @@ public:
     void setLowerRightX(int);
     void setLowerRightY(int);
     void setColorRectangle(const Color&);
-    void setFiring(bool);
     void setSurviving(bool);
-    
+    void setHome(Point);
     
     //Getter
     int getUpperLeftX();
     int getUpperLeftY();
     int getLowerRightX();
     int getLowerRightY();
-    bool getFiring();
     bool getSurviving();
     
     //Constructor
@@ -43,21 +43,22 @@ public:
     Rectangle(int UpperLeftX, int UpperLeftY, int LowerRightX, int LowerRightY);
     Rectangle(Rectangle& other);
     
+    //Draw Functions
     void drawRectangle(SDL_Plotter& r);
     
-    //bool collision(Sphere& );
+    void eraseRectangle(SDL_Plotter& g);
     
+    //Movement
     void moveRectangle(char direction);
-    
-    //bool collision(Rectangle& );
-    
-    void drawLaser(SDL_Plotter& g, int , int );
     void moveLaserUp(SDL_Plotter& g);
     void moveLaserDown(SDL_Plotter& g);
+    void introMove(SDL_Plotter& g, int midLine);
+    void attackMove(SDL_Plotter& g, bool right);
+
+    //void drawLaser(SDL_Plotter& g, int , int );
     
-    ~Rectangle();
+    //Collision
     bool enemyCollision(Rectangle laser[], int m);
-    
     bool shipCollision(Rectangle laser[], int m);
     
     
@@ -117,14 +118,14 @@ void Rectangle::setColorRectangle(const Color& d)
     rectangleColor = d;
 }
 
-void Rectangle::setFiring(bool a)
-{
-    firing = a;
-}
-
 void Rectangle::setSurviving(bool a)
 {
     surviving = a;
+}
+
+void Rectangle::setHome(Point a)
+{
+    home = a;
 }
 
 
@@ -145,15 +146,11 @@ int Rectangle::getLowerRightY()
 {
     return LowerRightY;
 }
-bool Rectangle::getFiring()
-{
-    return firing;
-}
+
 bool Rectangle::getSurviving()
 {
     return surviving;
 }
-
 
 
 void Rectangle::drawRectangle(SDL_Plotter& g)
@@ -166,6 +163,18 @@ void Rectangle::drawRectangle(SDL_Plotter& g)
         }
     }
 }
+
+void Rectangle::eraseRectangle(SDL_Plotter& g)
+{
+    for(int y = getUpperLeftY(); y <= getLowerRightY(); y++)
+    {
+        for(int x = getUpperLeftX(); x <= getLowerRightX(); x++)
+        {
+            g.plotPixel(x, y, 255, 255, 255);
+        }
+    }
+}
+
 
 void Rectangle::moveRectangle(char direction)
 {
@@ -199,21 +208,9 @@ void Rectangle::moveRectangle(char direction)
 }
 
 
-/*
-bool Rectangle::collision(Rectangle& laser)
-{
-    bool isCollision = false;
-    
-    if(getLowerRightY() >= laser.getUpperLeftY())
-    {
-        isCollision = true;
-    }
-    
-    return isCollision;
-}
- */
 
 //TEST Kevin
+/*
 void Rectangle::drawLaser(SDL_Plotter& g, int falconLeftX , int falconRightX)
 {
     for(int y = 585; y <= 595; y++)
@@ -224,6 +221,7 @@ void Rectangle::drawLaser(SDL_Plotter& g, int falconLeftX , int falconRightX)
         }
     }
 }
+ */
 
 
 void Rectangle::moveLaserUp(SDL_Plotter& g)
@@ -238,9 +236,47 @@ void Rectangle::moveLaserDown(SDL_Plotter& g)
     setLowerRightY(getLowerRightY() + 1);
 }
 
-Rectangle::~Rectangle()
+void Rectangle::introMove(SDL_Plotter& g, int midLine)
 {
-    
+    if(LowerRightY <= home.y && LowerRightX >= home.x)
+    {
+        setUpperLeftX(getUpperLeftX() - INTRO_MOVE_INCREMENT);
+        setLowerRightX(getLowerRightX() - INTRO_MOVE_INCREMENT);
+    }
+    else if (LowerRightY <= home.y && LowerRightX < home.x)
+    {
+        
+    }
+    else if (LowerRightX >= midLine)
+    {
+        setUpperLeftX(getUpperLeftX() + INTRO_MOVE_INCREMENT);
+        setLowerRightX(getLowerRightX() + INTRO_MOVE_INCREMENT);
+        setUpperLeftY(getUpperLeftY() - INTRO_MOVE_INCREMENT);
+        setLowerRightY(getLowerRightY() - INTRO_MOVE_INCREMENT);
+    }
+    else if (LowerRightX < midLine)
+    {
+        setUpperLeftX(getUpperLeftX() + INTRO_MOVE_INCREMENT);
+        setLowerRightX(getLowerRightX() + INTRO_MOVE_INCREMENT);
+        setUpperLeftY(getUpperLeftY() + INTRO_MOVE_INCREMENT);
+        setLowerRightY(getLowerRightY() + INTRO_MOVE_INCREMENT);
+    }
+}
+
+void Rectangle::attackMove(SDL_Plotter& g, bool right)
+{
+    setUpperLeftY(getUpperLeftY() - INTRO_MOVE_INCREMENT);
+    setLowerRightY(getLowerRightY() - INTRO_MOVE_INCREMENT);
+    if(right)
+    {
+        setUpperLeftX(getUpperLeftX() + INTRO_MOVE_INCREMENT);
+        setLowerRightX(getLowerRightX() + INTRO_MOVE_INCREMENT);
+    }
+    else
+    {
+        setUpperLeftX(getUpperLeftX() - INTRO_MOVE_INCREMENT);
+        setLowerRightX(getLowerRightX() - INTRO_MOVE_INCREMENT);
+    }
 }
 
 bool Rectangle::enemyCollision(Rectangle laser[], int m)
@@ -250,9 +286,7 @@ bool Rectangle::enemyCollision(Rectangle laser[], int m)
     if( (laser[m].getUpperLeftY() <= getLowerRightY() )
        && ( (laser[m].getUpperLeftX() <= getLowerRightX() )
            && ( laser[m].getLowerRightX() >= getUpperLeftX() )  ) )
-       //CLEANING UP THE PARANTHESIS
-       //(laser[m].getUpperLeftY() <= getLowerRightY() && (laser[m].getUpperLeftX() <= getLowerRightX() && laser[m].getLowerRightX() >= getUpperLeftX()) ))
-        //(laser.getUpperLeftY() <= getLowerRightY() && (laser.getUpperLeftX() <= getLowerRightX() && laser.getLowerRightX() >= getUpperLeftX())))
+
     {
         isCollision = true;
     }

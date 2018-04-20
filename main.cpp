@@ -13,14 +13,11 @@
 
 using namespace std;
 
-const int MAX_LEADS = 10;
-
-void setTrue(bool test[], int i);
-void setfalse(bool test[], int i);
+const int MID_LINE = 325;
 
 int main(int argc, char ** argv)
 {
-
+    
     cout << "Created by Code::Masters" << endl;
     cout << "Peter Doe, Carlos Hernandez, Kevin Kulda, and John Patel" << endl;
     cout << "Dr. Fendt (Professor)" << endl;
@@ -32,75 +29,67 @@ int main(int argc, char ** argv)
     cout << "*************************************************" << endl;
     cout << endl;
     cout << "Please Enjoy!" << endl;
-
+    
     //cout << SDL_GetTicks() << endl;
-
+    
     //Object Created
     SDL_Plotter g(700, 700);
     Map galagaMap;
-
+    
     //Variable Storage
     bool stopped = false;
     int x,y;
-    //bool moveLaser = false;
-
+    bool moveLaser = false;
+    bool start = false;
+    int i, j, k, startTime, useTime;
+    useTime = 0;
+    Point house(35,100);
+    
     //A default color.
     Color white;
     white.R = 255;
     white.G = 255;
     white.B = 255;
-
     
-    /*
-    Sphere ship;
-
-    ship.setX(350);
-    ship.setY(600);
-    ship.setColor(Color(212, 20, 20));
-    ship.setRadius(10);
-     */
-     
     //RECTANGLE SHIP
     Rectangle falcon;
-
+    
     falcon.setUpperLeftX(345);
     falcon.setUpperLeftY(595);
     falcon.setLowerRightX(355);
     falcon.setLowerRightY(605);
     falcon.setColorRectangle(Color(20,200,200));
-
+    
     Rectangle black;
     black.setUpperLeftX(100);
     black.setUpperLeftY(100);   cout << SDL_GetTicks() << endl;
     black.setLowerRightX(600);
     black.setLowerRightY(150);
     black.setColorRectangle(Color(0,0,0));
-
-    /*
-     Rectangle top;
-     black.setUpperLeftX(1);
-     black.setUpperLeftY(1);
-     black.setLowerRightX(699);
-     black.setLowerRightY(10);
-     black.setColorRectangle(Color(255,255,255));
-     */
+    
 
     
-    /*
-    Rectangle laser;
-    laser.setUpperLeftX(345);
-    laser.setUpperLeftY(550);
-    laser.setLowerRightX(355);
-    laser.setLowerRightY(580);
-    laser.setColorRectangle(Color(20,200,200));
-     */
-     
-     
+    
     Color test;
-
+    
     //Projectile Array.
     Rectangle lead[10];
-    for(int a = 0; a < MAX_LEADS; a++)
+
+    for(int a = 0; a < 10; a++)
+    {
+        lead[a].setUpperLeftX(345);
+        lead[a].setUpperLeftY(550);
+        lead[a].setLowerRightX(355);
+        lead[a].setLowerRightY(580);
+        lead[a].setColorRectangle(Color(20,200,200));
+        lead[a].setSurviving(false);
+    }
+    
+    
+    //Enemy Projectile Array.
+    Rectangle lazer[15];
+    /*
+    for(int a = 0; a < 10; a++)
     {
         lead[a].setUpperLeftX(345);
         lead[a].setUpperLeftY(550);
@@ -108,67 +97,57 @@ int main(int argc, char ** argv)
         lead[a].setLowerRightY(580);
         lead[a].setColorRectangle(Color(20,200,200));
         lead[a].setFiring(false);
-    }
+    }*/
     
-    //Enemy Projectile Array.
-    Rectangle lazer[15];
-    for(int a = 0; a < 10; a++)
-    {
-        lazer[a].setUpperLeftX(345);
-        lazer[a].setUpperLeftY(550);
-        lazer[a].setLowerRightX(355);
-        lazer[a].setLowerRightY(580);
-        lazer[a].setColorRectangle(Color(20,200,200));
-        lazer[a].setFiring(false);
-    }
-    
-
-
     //enemy Array.
     Rectangle enemy[10];
-    int upperX = 20;
-    int upperY = 10;
-    int lowerX = 70;
-    int lowerY = 60;
+    int upperX = -100;
+    int upperY = -100;
+    int lowerX = -100;
+    int lowerY = -100;
+    
     for(int a = 0; a < 10; a++)
     {
-
         enemy[a].setUpperLeftX(upperX);
         enemy[a].setUpperLeftY(upperY);
         enemy[a].setLowerRightX(lowerX);
         enemy[a].setLowerRightY(lowerY);
         enemy[a].setColorRectangle(Color(255,0,0));
-        enemy[a].setSurviving(true);
-
-        upperX += 60;
-        lowerX += 60;
+        enemy[a].setSurviving(false);
+        enemy[a].setHome(house);
+        house.x += 71;
     }
 
-
+    j = 0;
+    
     int count = 0;
     char direction1;
-    int i;
     bool plotEnemy = true;
-
+    
     //While the program is running.
     while (!g.getQuit())
     {
+        
         //While the game has not been stopped.
         if(!stopped)
         {
             //Clear the screen.
-            g.clear();
-
-            galagaMap.draw(g); //Proper location to draw map
+            //g.clear();
+            
+            //galagaMap.draw(g); //Proper location to draw map
+            
             falcon.drawRectangle(g);  //Redraw the ship
-
+            falcon.eraseRectangle(g);
+            
+            
+            
             //When a button is pressed.
             if(g.kbhit())
             {
                 // cout << SDL_GetTicks() << endl;
-
+                
                 direction1 = g.getKey();
-
+  
                 switch (toupper(direction1))
                 {
                     case 'A': falcon.moveRectangle('A');
@@ -177,95 +156,100 @@ int main(int argc, char ** argv)
                         break;
                     case 'G':
                         i = 0;
-
-                        while( i < MAX_LEADS )
+                        
+                        while( i < 10 )
                         {
-                            if(lead[i].getFiring() == false)
+                            if(lead[i].getSurviving() == false)
                             {
-
+                                
                                 lead[i].setUpperLeftX(falcon.getUpperLeftX());
                                 lead[i].setLowerRightX(falcon.getLowerRightX());
                                 lead[i].setUpperLeftY(550);
                                 lead[i].setLowerRightY(580);
-                                lead[i].setFiring(true);
+                                lead[i].setSurviving(true);
                                 i = 10;
                             }
                             i++;
                         }
-
+                        break;
+                    case 'S':
+                        start = true;
+                        cout << "Start" << endl;
+                        startTime = SDL_GetTicks();
                         break;
                 }
-
+                
                 falcon.moveRectangle(direction1); //Move ship based on key pressed.
                 falcon.drawRectangle(g);  //Redraw the ship
-
+                falcon.eraseRectangle(g);
+                
             }
-
-            for(int d = 0; d < MAX_LEADS; d++)
+            
+            for(int d = 0; d < 10; d++)
             {
-                if(lead[d].getFiring() == true)
+                lead[d].eraseRectangle(g);
+                if(lead[d].getSurviving() == true)
                 {
-                    if(lead[d].getUpperLeftY() < 5)
+                    if(lead[d].getUpperLeftY() < -10)
                     {
-                        lead[d].setFiring(false);
-                        //setfalse(firing, d);
+                        lead[d].setSurviving(false);
                     }
                     else
                     {
-                        lead[d].drawRectangle(g);
                         lead[d].moveLaserUp(g);
+                        lead[d].drawRectangle(g);
                     }
                 }
             }
             
+            
+            
             for(int h = 0; h < 10 ; h++)
             {
-                if(enemy[h].getSurviving())
+                if(lead[h].getSurviving())
                 {
                     for(int m = 0; m < 10; m++)
                     {
-                        if(lead[m].getFiring())
+                        if(lead[m].getSurviving())
                         {
                             if(enemy[h].enemyCollision(lead, m))
                             {
                                 enemy[h].setSurviving(false);
-                                lead[m].setFiring(false);
+                                lead[m].setSurviving(false);
                             }
                         }
                     }
                 }
-                
             }
-
+            
             falcon.drawRectangle(g);
-
+            
             if(g.kbhit())
             {
                 g.getKey();
             }
-
+            
+            /* //WHAT IS THIS SECTION USED FOR??
             int count = 0;
             int tick = 1000;
             
             //XCODE SUGGESTS THIS CHANGE -PETER:
             while(count < 10 && SDL_GetTicks() > tick)
-            //while(surviving[10] == true && count < 10 && SDL_GetTicks() > tick)
+                //while(surviving[10] == true && count < 10 && SDL_GetTicks() > tick)
             {
                 if(plotEnemy)
                 {
                     //g.Sleep(1000);
-
+                    
                     for(int f = 0; f < 10; f++)
                     {
                         enemy[f].drawRectangle(g);
-                        
-                        //XCode Suggests this change:
-                        //surviving[f] == true;
                         enemy[f].setSurviving(true);
                     }
                     plotEnemy = false;
                 }
-
+                
+             
                 if(count % 2 == 0)
                 {
                     upperX += 30;
@@ -280,32 +264,75 @@ int main(int argc, char ** argv)
                     lowerX -= 30;
                     lowerY += 30;
                 }
+             
                 count++;
                 tick += 1000;
             }
-
+        */
+            
             for(int f = 0; f < 10; f++)
             {
-                if(enemy[f].getSurviving())
+                if(enemy[f].getSurviving() == true)
                 {
                     enemy[f].drawRectangle(g);
                 }
             }
-
+            
+            
+            
+            
+            if((start) && (SDL_GetTicks() - startTime >= 1000) && (j < 10))
+            {
+                startTime += 1000;
+                cout << "SPawn" << endl;
+                enemy[j].setLowerRightX(30);
+                enemy[j].setLowerRightY(130);
+                enemy[j].setUpperLeftX(0);
+                enemy[j].setUpperLeftY(100);
+                enemy[j].setSurviving(true);
+                
+                j++;
+            }
+            
+            if(SDL_GetTicks() % 50 >= 40 && SDL_GetTicks() <= startTime + 200000 && start)
+            {
+                for(k = 0; k < 10; k ++)
+                {
+                    enemy[k].eraseRectangle(g);
+                    enemy[k].introMove(g, MID_LINE);
+                }
+            }
+            
+            if(SDL_GetTicks() % 50 >= 40 && SDL_GetTicks() + startTime > 20000 && start)
+            {
+                for(k = 0; k < 10; k ++)
+                {
+                    enemy[k].eraseRectangle(g);
+                    enemy[k].attackMove(g, 1);
+                }
+            }
+            
+            
+            
+            
+            
             //g.Sleep(10);
             g.update();
+            
         }
-        
         if(g.getMouseClick(x,y))
         {
             stopped = !stopped;
         }
+        
     }
-
+    
     return 0;
 }
 
 
+
+/*
 //We have to move these functions in .h file to minimze deduction on main clutter
 void setTrue(bool test[], int i)
 {
@@ -316,3 +343,4 @@ void setfalse(bool test[], int i)
 {
     test[i] = false;
 }
+*/
