@@ -127,13 +127,7 @@ int main(int argc, char ** argv)
         lead[a].setColorRectangle(Color(20,200,200));
         lead[a].setFiring(false);
     }
-    /*
-    bool firing[10];
-    for(int b = 0; b < 10; b++)
-    {
-        firing[b] = false;
-    }
-     */
+
 
     //enemy Array.
     Rectangle enemy[10];
@@ -149,16 +143,10 @@ int main(int argc, char ** argv)
         enemy[a].setLowerRightX(lowerX);
         enemy[a].setLowerRightY(lowerY);
         enemy[a].setColorRectangle(Color(255,0,0));
+        enemy[a].setSurviving(true);
 
         upperX += 60;
         lowerX += 60;
-
-    }
-
-    bool surviving[10];
-    for(int b = 0; b < 10; b++)
-    {
-        surviving[b] = true;
     }
 
 
@@ -209,8 +197,6 @@ int main(int argc, char ** argv)
                                 lead[i].setUpperLeftY(550);
                                 lead[i].setLowerRightY(580);
                                 lead[i].setFiring(true);
-                                //setTrue(firing, i);
-
                                 i = 10;
                             }
                             i++;
@@ -245,7 +231,7 @@ int main(int argc, char ** argv)
 
             for(int h = 0; h < 10 ; h++)
             {
-                if(surviving[h])
+                if(enemy[h].getSurviving())
                 {
                     for(int m = 0; m < 10; m++)
                     {
@@ -253,7 +239,7 @@ int main(int argc, char ** argv)
                         {
                             if(enemy[h].enemyCollision(lead, m))
                             {
-                                surviving[h] = false;
+                                enemy[h].setSurviving(false);
                                 lead[m].setFiring(false);
                             }
                         }
@@ -290,7 +276,7 @@ int main(int argc, char ** argv)
                         
                         //XCode Suggests this change:
                         //surviving[f] == true;
-                        surviving[f] = true;
+                        enemy[f].setSurviving(true);
                     }
                     plotEnemy = false;
                 }
@@ -315,7 +301,7 @@ int main(int argc, char ** argv)
 
             for(int f = 0; f < 10; f++)
             {
-                if(surviving[f] == true)
+                if(enemy[f].getSurviving())
                 {
                     enemy[f].drawRectangle(g);
                 }

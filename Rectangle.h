@@ -17,6 +17,7 @@ private:
     int LowerRightY;
     Color rectangleColor;
     bool firing;
+    bool surviving;
     
 public:
     //Setter
@@ -26,6 +27,8 @@ public:
     void setLowerRightY(int);
     void setColorRectangle(const Color&);
     void setFiring(bool);
+    void setSurviving(bool);
+    
     
     //Getter
     int getUpperLeftX();
@@ -33,6 +36,7 @@ public:
     int getLowerRightX();
     int getLowerRightY();
     bool getFiring();
+    bool getSurviving();
     
     //Constructor
     Rectangle();
@@ -40,11 +44,17 @@ public:
     Rectangle(Rectangle& other);
     
     void drawRectangle(SDL_Plotter& r);
+    
     //bool collision(Sphere& );
+    
     void moveRectangle(char direction);
+    
     //bool collision(Rectangle& );
+    
     void drawLaser(SDL_Plotter& g, int , int );
     void moveLaserUp(SDL_Plotter& g);
+    void moveLaserDown(SDL_Plotter& g);
+    
     ~Rectangle();
     bool enemyCollision(Rectangle laser[], int m);
     
@@ -112,6 +122,11 @@ void Rectangle::setFiring(bool a)
     firing = a;
 }
 
+void Rectangle::setSurviving(bool a)
+{
+    surviving = a;
+}
+
 
 //Getter
 int Rectangle::getUpperLeftX()
@@ -134,6 +149,11 @@ bool Rectangle::getFiring()
 {
     return firing;
 }
+bool Rectangle::getSurviving()
+{
+    return surviving;
+}
+
 
 
 void Rectangle::drawRectangle(SDL_Plotter& g)
@@ -210,6 +230,12 @@ void Rectangle::moveLaserUp(SDL_Plotter& g)
 {
     setUpperLeftY(getUpperLeftY() - 1);
     setLowerRightY(getLowerRightY() - 1);
+}
+
+void Rectangle::moveLaserDown(SDL_Plotter& g)
+{
+    setUpperLeftY(getUpperLeftY() + 1);
+    setLowerRightY(getLowerRightY() + 1);
 }
 
 Rectangle::~Rectangle()
