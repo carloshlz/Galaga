@@ -16,12 +16,12 @@ class Map
     Rectangle map[NUM_WALLS];
 
   public:
-    void Map();
+    Map();
     void draw(SDL_Plotter& g);
 
 };
 
-void Map::Map()
+ Map::Map()
 {
     //Variable Storage
     double ulx, uly, llx, lly;
@@ -39,11 +39,11 @@ void Map::Map()
         //Rectangle set up
         map[i].setUpperLeftX(ulx);
         map[i].setUpperLeftY(uly);
-        map[i].setLowerLeftX(llx);
-        map[i].setLowerLeftY(lly);
+        map[i].setLowerRightX(llx);
+        map[i].setLowerRightY(lly);
 
         //Color
-        map[i].setColor(Color(R, G, B));
+        map[i].setColorRectangle(Color(R, G, B));
     }
 
     //Close File
@@ -55,7 +55,7 @@ void Map::draw(SDL_Plotter& g)
     //Data Abstraction to draw the rectangles
     for(int i = 0; i < NUM_WALLS; i++)
     {
-        map[i].draw(g);
+        map[i].drawRectangle(g);
     }
 }
 
