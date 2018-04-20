@@ -13,6 +13,8 @@
 
 using namespace std;
 
+const int MAX_LEADS = 10;
+
 void setTrue(bool test[], int i);
 void setfalse(bool test[], int i);
 
@@ -40,7 +42,7 @@ int main(int argc, char ** argv)
     //Variable Storage
     bool stopped = false;
     int x,y;
-    bool moveLaser = false;
+    //bool moveLaser = false;
 
     //A default color.
     Color white;
@@ -98,27 +100,7 @@ int main(int argc, char ** argv)
 
     //Projectile Array.
     Rectangle lead[10];
-    
-
-    for(int a = 0; a < 10; a++)
-    {
-        lead[a].setUpperLeftX(345);
-        lead[a].setUpperLeftY(550);
-        lead[a].setLowerRightX(355);
-        lead[a].setLowerRightY(580);
-        lead[a].setColorRectangle(Color(20,200,200));
-    }
-    bool firing[10];
-    for(int b = 0; b < 10; b++)
-    {
-        firing[b] = false;
-    }
-    
-    
-    //Enemy Projectile Array.
-    Rectangle lazer[15];
-    
-    for(int a = 0; a < 10; a++)
+    for(int a = 0; a < MAX_LEADS; a++)
     {
         lead[a].setUpperLeftX(345);
         lead[a].setUpperLeftY(550);
@@ -127,6 +109,19 @@ int main(int argc, char ** argv)
         lead[a].setColorRectangle(Color(20,200,200));
         lead[a].setFiring(false);
     }
+    
+    //Enemy Projectile Array.
+    Rectangle lazer[15];
+    for(int a = 0; a < 10; a++)
+    {
+        lazer[a].setUpperLeftX(345);
+        lazer[a].setUpperLeftY(550);
+        lazer[a].setLowerRightX(355);
+        lazer[a].setLowerRightY(580);
+        lazer[a].setColorRectangle(Color(20,200,200));
+        lazer[a].setFiring(false);
+    }
+    
 
 
     //enemy Array.
@@ -155,13 +150,9 @@ int main(int argc, char ** argv)
     int i;
     bool plotEnemy = true;
 
-
-
     //While the program is running.
     while (!g.getQuit())
     {
-
-
         //While the game has not been stopped.
         if(!stopped)
         {
@@ -187,7 +178,7 @@ int main(int argc, char ** argv)
                     case 'G':
                         i = 0;
 
-                        while( i < 10 )
+                        while( i < MAX_LEADS )
                         {
                             if(lead[i].getFiring() == false)
                             {
@@ -210,7 +201,7 @@ int main(int argc, char ** argv)
 
             }
 
-            for(int d = 0; d < 10; d++)
+            for(int d = 0; d < MAX_LEADS; d++)
             {
                 if(lead[d].getFiring() == true)
                 {
@@ -227,8 +218,6 @@ int main(int argc, char ** argv)
                 }
             }
             
-            
-
             for(int h = 0; h < 10 ; h++)
             {
                 if(enemy[h].getSurviving())
@@ -245,6 +234,7 @@ int main(int argc, char ** argv)
                         }
                     }
                 }
+                
             }
 
             falcon.drawRectangle(g);
@@ -252,11 +242,6 @@ int main(int argc, char ** argv)
             if(g.kbhit())
             {
                 g.getKey();
-            }
-
-            if(g.getMouseClick(x,y))
-            {
-                stopped = !stopped;
             }
 
             int count = 0;
@@ -309,6 +294,11 @@ int main(int argc, char ** argv)
 
             //g.Sleep(10);
             g.update();
+        }
+        
+        if(g.getMouseClick(x,y))
+        {
+            stopped = !stopped;
         }
     }
 
