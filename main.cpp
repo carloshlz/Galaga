@@ -48,13 +48,16 @@ int main(int argc, char ** argv)
     white.G = 255;
     white.B = 255;
 
+    
+    /*
     Sphere ship;
 
     ship.setX(350);
     ship.setY(600);
     ship.setColor(Color(212, 20, 20));
     ship.setRadius(10);
-
+     */
+     
     //RECTANGLE SHIP
     Rectangle falcon;
 
@@ -80,17 +83,22 @@ int main(int argc, char ** argv)
      black.setColorRectangle(Color(255,255,255));
      */
 
+    
+    /*
     Rectangle laser;
     laser.setUpperLeftX(345);
     laser.setUpperLeftY(550);
     laser.setLowerRightX(355);
     laser.setLowerRightY(580);
     laser.setColorRectangle(Color(20,200,200));
-
+     */
+     
+     
     Color test;
 
     //Projectile Array.
     Rectangle lead[10];
+    
 
     for(int a = 0; a < 10; a++)
     {
@@ -105,6 +113,27 @@ int main(int argc, char ** argv)
     {
         firing[b] = false;
     }
+    
+    
+    //Enemy Projectile Array.
+    Rectangle lazer[15];
+    
+    for(int a = 0; a < 10; a++)
+    {
+        lead[a].setUpperLeftX(345);
+        lead[a].setUpperLeftY(550);
+        lead[a].setLowerRightX(355);
+        lead[a].setLowerRightY(580);
+        lead[a].setColorRectangle(Color(20,200,200));
+        lead[a].setFiring(false);
+    }
+    /*
+    bool firing[10];
+    for(int b = 0; b < 10; b++)
+    {
+        firing[b] = false;
+    }
+     */
 
     //enemy Array.
     Rectangle enemy[10];
@@ -172,15 +201,15 @@ int main(int argc, char ** argv)
 
                         while( i < 10 )
                         {
-                            if(firing[i] == false)
+                            if(lead[i].getFiring() == false)
                             {
 
                                 lead[i].setUpperLeftX(falcon.getUpperLeftX());
                                 lead[i].setLowerRightX(falcon.getLowerRightX());
                                 lead[i].setUpperLeftY(550);
                                 lead[i].setLowerRightY(580);
-
-                                setTrue(firing, i);
+                                lead[i].setFiring(true);
+                                //setTrue(firing, i);
 
                                 i = 10;
                             }
@@ -197,11 +226,12 @@ int main(int argc, char ** argv)
 
             for(int d = 0; d < 10; d++)
             {
-                if(firing[d] == true)
+                if(lead[d].getFiring() == true)
                 {
                     if(lead[d].getUpperLeftY() < 5)
                     {
-                        setfalse(firing, d);
+                        lead[d].setFiring(false);
+                        //setfalse(firing, d);
                     }
                     else
                     {
@@ -210,6 +240,8 @@ int main(int argc, char ** argv)
                     }
                 }
             }
+            
+            
 
             for(int h = 0; h < 10 ; h++)
             {
@@ -217,12 +249,12 @@ int main(int argc, char ** argv)
                 {
                     for(int m = 0; m < 10; m++)
                     {
-                        if(firing[m])
+                        if(lead[m].getFiring())
                         {
                             if(enemy[h].enemyCollision(lead, m))
                             {
                                 surviving[h] = false;
-                                firing[m] = false;
+                                lead[m].setFiring(false);
                             }
                         }
                     }
@@ -243,9 +275,11 @@ int main(int argc, char ** argv)
 
             int count = 0;
             int tick = 1000;
-            while(surviving[10] == true && count < 10 && SDL_GetTicks() > tick)
+            
+            //XCODE SUGGESTS THIS CHANGE -PETER:
+            while(count < 10 && SDL_GetTicks() > tick)
+            //while(surviving[10] == true && count < 10 && SDL_GetTicks() > tick)
             {
-
                 if(plotEnemy)
                 {
                     //g.Sleep(1000);
@@ -253,7 +287,10 @@ int main(int argc, char ** argv)
                     for(int f = 0; f < 10; f++)
                     {
                         enemy[f].drawRectangle(g);
-                        surviving[f] == true;
+                        
+                        //XCode Suggests this change:
+                        //surviving[f] == true;
+                        surviving[f] = true;
                     }
                     plotEnemy = false;
                 }

@@ -16,6 +16,7 @@ private:
     int LowerRightX;
     int LowerRightY;
     Color rectangleColor;
+    bool firing;
     
 public:
     //Setter
@@ -24,12 +25,14 @@ public:
     void setLowerRightX(int);
     void setLowerRightY(int);
     void setColorRectangle(const Color&);
+    void setFiring(bool);
     
     //Getter
     int getUpperLeftX();
     int getUpperLeftY();
     int getLowerRightX();
     int getLowerRightY();
+    bool getFiring();
     
     //Constructor
     Rectangle();
@@ -37,13 +40,15 @@ public:
     Rectangle(Rectangle& other);
     
     void drawRectangle(SDL_Plotter& r);
-    bool collision(Sphere& );
+    //bool collision(Sphere& );
     void moveRectangle(char direction);
-    bool collision(Rectangle& );
+    //bool collision(Rectangle& );
     void drawLaser(SDL_Plotter& g, int , int );
     void moveLaserUp(SDL_Plotter& g);
     ~Rectangle();
     bool enemyCollision(Rectangle laser[], int m);
+    
+    bool shipCollision(Rectangle laser[], int m);
     
     
 };
@@ -102,6 +107,11 @@ void Rectangle::setColorRectangle(const Color& d)
     rectangleColor = d;
 }
 
+void Rectangle::setFiring(bool a)
+{
+    firing = a;
+}
+
 
 //Getter
 int Rectangle::getUpperLeftX()
@@ -120,6 +130,11 @@ int Rectangle::getLowerRightY()
 {
     return LowerRightY;
 }
+bool Rectangle::getFiring()
+{
+    return firing;
+}
+
 
 void Rectangle::drawRectangle(SDL_Plotter& g)
 {
@@ -164,6 +179,7 @@ void Rectangle::moveRectangle(char direction)
 }
 
 
+/*
 bool Rectangle::collision(Rectangle& laser)
 {
     bool isCollision = false;
@@ -175,6 +191,7 @@ bool Rectangle::collision(Rectangle& laser)
     
     return isCollision;
 }
+ */
 
 //TEST Kevin
 void Rectangle::drawLaser(SDL_Plotter& g, int falconLeftX , int falconRightX)
@@ -204,7 +221,11 @@ bool Rectangle::enemyCollision(Rectangle laser[], int m)
 {
     bool isCollision = false;
     
-    if( (laser[m].getUpperLeftY() <= getLowerRightY() && (laser[m].getUpperLeftX() <= getLowerRightX() && laser[m].getLowerRightX() >= getUpperLeftX()) )) // ||
+    if( (laser[m].getUpperLeftY() <= getLowerRightY() )
+       && ( (laser[m].getUpperLeftX() <= getLowerRightX() )
+           && ( laser[m].getLowerRightX() >= getUpperLeftX() )  ) )
+       //CLEANING UP THE PARANTHESIS
+       //(laser[m].getUpperLeftY() <= getLowerRightY() && (laser[m].getUpperLeftX() <= getLowerRightX() && laser[m].getLowerRightX() >= getUpperLeftX()) ))
         //(laser.getUpperLeftY() <= getLowerRightY() && (laser.getUpperLeftX() <= getLowerRightX() && laser.getLowerRightX() >= getUpperLeftX())))
     {
         isCollision = true;
@@ -212,6 +233,19 @@ bool Rectangle::enemyCollision(Rectangle laser[], int m)
     return isCollision;
 }
 
+bool Rectangle::shipCollision(Rectangle laser[], int m)
+{
+    bool isCollision = false;
+    
+    if( (laser[m].getUpperLeftY() >= getLowerRightY() )
+        && ( laser[m].getUpperLeftX() <= getLowerRightX() )
+        && ( laser[m].getLowerRightX() >= getUpperLeftX() )
+        )
+    {
+        isCollision = true;
+    }
+    return isCollision;
+}
 
 
 #endif // RECTANGLE_H_INCLUDED
