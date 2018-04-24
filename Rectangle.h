@@ -7,7 +7,10 @@
 #include <iostream>
 using namespace std;
 
-const int INTRO_MOVE_INCREMENT = 1;
+const int INTRO_MOVE_INCREMENT = 4;
+const int MOVE_RECTANGLE_INCREMENT = 20;
+const int MOVE_LEFT_OR_RIGHT_INCREMENT = 3;
+const int ATTACK_MOVE_INCREMENT = 1;
 
 class Rectangle
 {
@@ -22,7 +25,7 @@ private:
     Point home;
     
 public:
-    //Setter
+    //Setters
     void setUpperLeftX(int);
     void setUpperLeftY(int);
     void setLowerRightX(int);
@@ -38,14 +41,13 @@ public:
     int getLowerRightY();
     bool getSurviving();
     
-    //Constructor
+    //Constructors
     Rectangle();
     Rectangle(int UpperLeftX, int UpperLeftY, int LowerRightX, int LowerRightY);
     Rectangle(Rectangle& other);
     
     //Draw Functions
     void drawRectangle(SDL_Plotter& r);
-    
     void eraseRectangle(SDL_Plotter& g);
     
     //Movement
@@ -53,7 +55,11 @@ public:
     void moveLaserUp(SDL_Plotter& g);
     void moveLaserDown(SDL_Plotter& g);
     void introMove(SDL_Plotter& g, int midLine);
-    void attackMove(SDL_Plotter& g, bool right);
+    void attackMove(SDL_Plotter& g);
+    //void attackMove(SDL_Plotter& g, bool right);
+    
+    void moveEnemyRight();
+    void moveEnemyLeft();
 
     //void drawLaser(SDL_Plotter& g, int , int );
     
@@ -72,7 +78,6 @@ Rectangle::Rectangle()
     UpperLeftY = 2;
     LowerRightX = 1;
     LowerRightY = 1;
-    Color rectangleColor = Color(200,200,200);
     
 }
 
@@ -82,7 +87,6 @@ Rectangle::Rectangle(Rectangle& other)
     UpperLeftY = 550;
     LowerRightX = other.getLowerRightX();
     LowerRightY = 580;
-    Color rectangleColor = Color(200,200,200);
 }
 
 
@@ -92,7 +96,6 @@ Rectangle::Rectangle(int ULX, int ULY, int LRX, int LLY)
     UpperLeftY = ULY;
     LowerRightX = LRX;
     LowerRightY = LLY;
-    Color rectangleColor = Color(500,500,500);
 }
 
 //Setter
@@ -188,8 +191,8 @@ void Rectangle::moveRectangle(char direction)
             }
             else
             {
-                setUpperLeftX(getUpperLeftX() - 5);
-                setLowerRightX(getLowerRightX() - 5);
+                setUpperLeftX(getUpperLeftX() - MOVE_RECTANGLE_INCREMENT);
+                setLowerRightX(getLowerRightX() - MOVE_RECTANGLE_INCREMENT);
             }
             break;
         case 'D':
@@ -200,40 +203,24 @@ void Rectangle::moveRectangle(char direction)
             }
             else
             {
-                setLowerRightX(getLowerRightX() + 5);
-                setUpperLeftX(getUpperLeftX() + 5);
+                setLowerRightX(getLowerRightX() + MOVE_RECTANGLE_INCREMENT);
+                setUpperLeftX(getUpperLeftX() + MOVE_RECTANGLE_INCREMENT);
             }
             break;
     }
 }
 
 
-
-//TEST Kevin
-/*
-void Rectangle::drawLaser(SDL_Plotter& g, int falconLeftX , int falconRightX)
-{
-    for(int y = 585; y <= 595; y++)
-    {
-        for(int x = falconLeftX; x <= falconLeftX; x++)
-        {
-            g.plotPixel(x, y, rectangleColor.R, rectangleColor.G, rectangleColor.B);
-        }
-    }
-}
- */
-
-
 void Rectangle::moveLaserUp(SDL_Plotter& g)
 {
-    setUpperLeftY(getUpperLeftY() - 1);
-    setLowerRightY(getLowerRightY() - 1);
+    setUpperLeftY(getUpperLeftY() - 3);
+    setLowerRightY(getLowerRightY() - 3);
 }
 
 void Rectangle::moveLaserDown(SDL_Plotter& g)
 {
-    setUpperLeftY(getUpperLeftY() + 1);
-    setLowerRightY(getLowerRightY() + 1);
+    setUpperLeftY(getUpperLeftY() + 3);
+    setLowerRightY(getLowerRightY() + 3);
 }
 
 void Rectangle::introMove(SDL_Plotter& g, int midLine)
@@ -263,27 +250,31 @@ void Rectangle::introMove(SDL_Plotter& g, int midLine)
     }
 }
 
-void Rectangle::attackMove(SDL_Plotter& g, bool right)
+void Rectangle::attackMove(SDL_Plotter& g)
 {
-    setUpperLeftY(getUpperLeftY() - INTRO_MOVE_INCREMENT);
-    setLowerRightY(getLowerRightY() - INTRO_MOVE_INCREMENT);
-    if(right)
-    {
-        setUpperLeftX(getUpperLeftX() + INTRO_MOVE_INCREMENT);
-        setLowerRightX(getLowerRightX() + INTRO_MOVE_INCREMENT);
-    }
-    else
-    {
-        setUpperLeftX(getUpperLeftX() - INTRO_MOVE_INCREMENT);
-        setLowerRightX(getLowerRightX() - INTRO_MOVE_INCREMENT);
-    }
+    setUpperLeftY(getUpperLeftY() + ATTACK_MOVE_INCREMENT);
+    setLowerRightY(getLowerRightY() + ATTACK_MOVE_INCREMENT);
+}
+
+
+void Rectangle::moveEnemyRight()
+{
+    setUpperLeftX(getUpperLeftX() + MOVE_LEFT_OR_RIGHT_INCREMENT);
+    setLowerRightX(getLowerRightX() + MOVE_LEFT_OR_RIGHT_INCREMENT);
+}
+
+void Rectangle::moveEnemyLeft()
+{
+    setUpperLeftX(getUpperLeftX() - MOVE_LEFT_OR_RIGHT_INCREMENT);
+    setLowerRightX(getLowerRightX() - MOVE_LEFT_OR_RIGHT_INCREMENT);
 }
 
 bool Rectangle::enemyCollision(Rectangle laser[], int m)
 {
     bool isCollision = false;
     
-    if( (laser[m].getUpperLeftY() <= getLowerRightY() )
+    if( laser[m].getUpperLeftY() <= getLowerRightY()
+         && (laser[m].getLowerRightY() >= getUpperLeftY() )
        && ( (laser[m].getUpperLeftX() <= getLowerRightX() )
            && ( laser[m].getLowerRightX() >= getUpperLeftX() )  ) )
 
@@ -298,6 +289,7 @@ bool Rectangle::shipCollision(Rectangle laser[], int m)
     bool isCollision = false;
     
     if( (laser[m].getUpperLeftY() >= getLowerRightY() )
+        && (laser[m].getLowerRightY() <= getUpperLeftY() )
         && ( laser[m].getUpperLeftX() <= getLowerRightX() )
         && ( laser[m].getLowerRightX() >= getUpperLeftX() )
         )
@@ -306,6 +298,7 @@ bool Rectangle::shipCollision(Rectangle laser[], int m)
     }
     return isCollision;
 }
+
 
 
 #endif // RECTANGLE_H_INCLUDED
