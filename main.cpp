@@ -13,6 +13,7 @@
 #include "Sphere.h"
 #include "Point.h"
 #include "Rectangle.h"
+#include "spaceship.h"
 #include <ctime>
 #include "Map.h"
 
@@ -60,7 +61,7 @@ int main(int argc, char ** argv)
     bool start = false; //Records the game beginning
     int mouseClick1,mouseClick2; //Records whether the mouse was clicked
     int howManyAreSpawned; //Records the number of
-                            //enemies that have spawned for the current round
+    //enemies that have spawned for the current round
     int i, j; //Counter variables
     howManyAreSpawned = 0;
     
@@ -125,6 +126,7 @@ int main(int argc, char ** argv)
     blue[8] = 150;
     blue[9] = 150;
     
+    /*
     //Initializing the player's ship
     Rectangle falcon;
     
@@ -134,6 +136,10 @@ int main(int argc, char ** argv)
     falcon.setLowerRightX(525);
     falcon.setLowerRightY(640);
     falcon.setColorRectangle(Color(20,200,200));
+    */
+    const int MAX_ = 100;
+    Rectangle shipp[MAX_];
+    
     
     Rectangle casket;
     casket.setUpperLeftX(20);
@@ -145,19 +151,10 @@ int main(int argc, char ** argv)
     
     //Initializing the friendly projectile array
     Rectangle lead[NUMBER_OF_FRIENDLY_LASERS];
-
+    
     //Setting the colors for the friendly projectiles
     for(i = 0; i < NUMBER_OF_FRIENDLY_LASERS; i++)
     {
-        //I don't think that we need to set these locations
-        //but the might be necessary if the program tries to draw them
-        //off screen
-        /*
-        lead[i].setUpperLeftX(345);
-        lead[i].setUpperLeftY(550);
-        lead[i].setLowerRightX(355);
-        lead[i].setLowerRightY(580);
-         */
         lead[i].setColorRectangle(Color(255,20,250));
         lead[i].setSurviving(false);
     }
@@ -169,13 +166,6 @@ int main(int argc, char ** argv)
     //Setting the colors for the enemy projectiles
     for(i = 0; i < NUMBER_OF_ENEMY_LASERS; i++)
     {
-        //Same as above
-        /*
-        lazer[i].setUpperLeftX(345);
-        lazer[i].setUpperLeftY(550);
-        lazer[i].setLowerRightX(355);
-        lazer[i].setLowerRightY(580);
-         */
         lazer[i].setColorRectangle(Color(red[i],green[i], blue[i]));
         lazer[i].setSurviving(false);
     }
@@ -193,10 +183,11 @@ int main(int argc, char ** argv)
             
             //Clear the screen.
             //g.clear();
-
-            galagaMap.draw(g);  //Draw the map
+            
+            //galagaMap.draw(g);  //Draw the map
+            shipp[MAX_].setShip(&shipp[MAX_]);
             //falcon.drawRectangle(g);  //Not needed
-            falcon.eraseRectangle(g);
+            shipp[MAX_].eraseRectangle(g);
             
             
             //When a button is pressed.
@@ -205,9 +196,9 @@ int main(int argc, char ** argv)
                 direction1 = g.getKey(); //Set the direction to the input
                 switch (toupper(direction1))
                 {
-                    case 'A': falcon.moveRectangle('A');//Move the ship left
+                    case 'A': shipp[MAX_].moveRectangle('A');//Move the ship left
                         break;
-                    case 'D': falcon.moveRectangle('D');//Move the ship right
+                    case 'D': shipp[MAX_].moveRectangle('D');//Move the ship right
                         break;
                     case 'S':
                         i = 0;
@@ -216,8 +207,8 @@ int main(int argc, char ** argv)
                             if(lead[i].getSurviving() == false) //If it is not active
                             {
                                 //Initialized it
-                                lead[i].setUpperLeftX(falcon.getUpperLeftX() + 15);
-                                lead[i].setLowerRightX(falcon.getLowerRightX() - 15);
+                                lead[i].setUpperLeftX(shipp[MAX_].getUpperLeftX() + 15);
+                                lead[i].setLowerRightX(shipp[MAX_].getLowerRightX() - 15);
                                 lead[i].setUpperLeftY(569);
                                 lead[i].setLowerRightY(599);
                                 lead[i].setSurviving(true);
@@ -241,7 +232,7 @@ int main(int argc, char ** argv)
                             enemy[i].setSurviving(false); //Kill it
                             enemy[i].setHome(house); //Reset it's home
                             house.x += BATTLE_LOCATION_ENEMY_INCREMENT; //Add to the home increment, so that
-                                                                        //the enemies will have different homes
+                            //the enemies will have different homes
                         }
                         break;
                 }
@@ -266,7 +257,7 @@ int main(int argc, char ** argv)
                     }
                 }
             }
-
+            
             //Checking for collision with the enemy:
             //For every enemy;
             for(i = 0; i < NUMBER_OF_ENEMIES_EASY ; i++)
@@ -287,14 +278,6 @@ int main(int argc, char ** argv)
                                 enemy[i].setSurviving(false); //Kill the enemy
                                 enemy[i].eraseRectangle(g); //Erase the enemy
                                 
-                                //Probably not needed
-                                /*
-                                enemy[i].setUpperLeftX(395); //Reset their location
-                                enemy[i].setUpperLeftY(390);
-                                enemy[i].setLowerRightX(390);
-                                enemy[i].setLowerRightY(395);
-                                */
-                                
                                 lead[j].setSurviving(false);//Kill the projectile
                                 lead[j].eraseRectangle(g); //Erase the projectile
                             }
@@ -309,7 +292,7 @@ int main(int argc, char ** argv)
             }
             
             //Draw the player ship
-            falcon.drawRectangle(g);
+            shipp[MAX_].drawShip(g, &shipp[100], MAX_);
             
             //Record the input key
             if(g.kbhit())
@@ -348,7 +331,7 @@ int main(int argc, char ** argv)
                 //Update the number of spawned enemies
                 howManyAreSpawned++;
             }
-
+            
             //Intro moves *************
             //At random (but fairly consistent intervals), if the current time is less
             //than the time that the game started at plus the intro time constant, and
@@ -402,9 +385,9 @@ int main(int argc, char ** argv)
             //At random (but fairly consistent intervals), if moveTheEnemyRight is
             //true, and the time is correct, and the game has started:
             if(moveTheEnemyLeft == true
-                    && SDL_GetTicks() % 50 >= 40
-                    &&   SDL_GetTicks() >= startTime + LEFT_RIGHT_START_TIME
-                    && start
+               && SDL_GetTicks() % 50 >= 40
+               &&   SDL_GetTicks() >= startTime + LEFT_RIGHT_START_TIME
+               && start
                )
             {
                 //For every enemy
@@ -425,7 +408,7 @@ int main(int argc, char ** argv)
                     }
                 }
             }
-
+            
             
             
             //Attack moves:
@@ -433,43 +416,43 @@ int main(int argc, char ** argv)
              This section uses slightly different logic, since it must record
              how many ships have moved before each ship to see whether it should
              do the attack move.
-            */
+             */
             
             //For every enemy:
             for(i = 0; i < NUMBER_OF_ENEMIES_EASY; i++)
             {
                 /*
                  If:
-                    1) The enemy is alive,
-                    2) At a random (but fairly consistent interval),
-                    3) The proper time in the game has been reached,
-                    4) The game has started, and
-                    5) Two seconds have elapsed since the previous ship began
-                        its attack move:
+                 1) The enemy is alive,
+                 2) At a random (but fairly consistent interval),
+                 3) The proper time in the game has been reached,
+                 4) The game has started, and
+                 5) Two seconds have elapsed since the previous ship began
+                 its attack move:
                  */
                 if((enemy[i].getSurviving())
                    && SDL_GetTicks() % 50 >= 40
                    && SDL_GetTicks() - startTime > ATTACK_START_TIME
                    && start
                    && SDL_GetTicks() - startTime - ATTACK_START_TIME  >= 2000 * i)
+                {
+                    enemy[i].eraseRectangle(g); //Erase it
+                    if(moveTheEnemyLeft) //If the enemies are moving left
                     {
-                        enemy[i].eraseRectangle(g); //Erase it
-                        if(moveTheEnemyLeft) //If the enemies are moving left
-                        {
-                            enemy[i].moveEnemyLeft(); //Move an extra two times
-                            enemy[i].moveEnemyLeft();
-                        }
-                        else
-                        {
-                            enemy[i].moveEnemyRight(); //Move an extra two times
-                            enemy[i].moveEnemyRight();
-                        }
-                        enemy[i].attackMove(g); //Perform the attack move
-                        enemy[i].drawRectangle(g); //And draw the enemy
+                        enemy[i].moveEnemyLeft(); //Move an extra two times
+                        enemy[i].moveEnemyLeft();
                     }
+                    else
+                    {
+                        enemy[i].moveEnemyRight(); //Move an extra two times
+                        enemy[i].moveEnemyRight();
+                    }
+                    enemy[i].attackMove(g); //Perform the attack move
+                    enemy[i].drawRectangle(g); //And draw the enemy
+                }
             }
             
-        
+            
             
             //Enemy fire control
             if(SDL_GetTicks() % 300 >= 295)
@@ -492,7 +475,7 @@ int main(int argc, char ** argv)
                 i ++;
             }
             
-             
+            
             
             //Updating the enemy's lasers
             for(i = 0; i < NUMBER_OF_ENEMY_LASERS; i++)
@@ -517,7 +500,7 @@ int main(int argc, char ** argv)
             {
                 if(lazer[i].getSurviving() == true)
                 {
-                    if(falcon.shipCollision(lazer, i))
+                    if(shipp[MAX_].shipCollision(lazer, i))
                     {
                         lazer[i].setSurviving(false);
                         //falcon.setSurviving(false);
@@ -530,9 +513,9 @@ int main(int argc, char ** argv)
             for(i = 0; i < NUMBER_OF_ENEMIES_EASY; i++)
             {
                 if((enemy[i].getLowerRightX() >= 990
-                   || enemy[i].getLowerRightX() <= 40
-                   || enemy[i].getLowerRightY() >= 900
-                   || enemy[i].getLowerRightY() <= 40)
+                    || enemy[i].getLowerRightX() <= 40
+                    || enemy[i].getLowerRightY() >= 900
+                    || enemy[i].getLowerRightY() <= 40)
                    && enemy[i].getSurviving()
                    )
                 {
@@ -558,4 +541,5 @@ int main(int argc, char ** argv)
     
     return 0;
 }
+
 

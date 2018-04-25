@@ -5,6 +5,7 @@
 #include "SDL_Plotter.h"
 #include "Point.h"
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 const int INTRO_MOVE_INCREMENT = 4;
@@ -33,6 +34,8 @@ public:
     void setColorRectangle(const Color&);
     void setSurviving(bool);
     void setHome(Point);
+    void setShip(Rectangle ship[]);
+    void drawShip(SDL_Plotter& g, Rectangle ship[], const int NUM_);
     
     //Getter
     int getUpperLeftX();
@@ -60,7 +63,7 @@ public:
     
     void moveEnemyRight();
     void moveEnemyLeft();
-
+    
     //void drawLaser(SDL_Plotter& g, int , int );
     
     //Collision
@@ -274,10 +277,10 @@ bool Rectangle::enemyCollision(Rectangle laser[], int m)
     bool isCollision = false;
     
     if( laser[m].getUpperLeftY() <= getLowerRightY()
-         && (laser[m].getLowerRightY() >= getUpperLeftY() )
+       && (laser[m].getLowerRightY() >= getUpperLeftY() )
        && ( (laser[m].getUpperLeftX() <= getLowerRightX() )
            && ( laser[m].getLowerRightX() >= getUpperLeftX() )  ) )
-
+        
     {
         isCollision = true;
     }
@@ -289,14 +292,54 @@ bool Rectangle::shipCollision(Rectangle laser[], int m)
     bool isCollision = false;
     
     if( (laser[m].getUpperLeftY() >= getLowerRightY() )
-        && (laser[m].getLowerRightY() <= getUpperLeftY() )
-        && ( laser[m].getUpperLeftX() <= getLowerRightX() )
-        && ( laser[m].getLowerRightX() >= getUpperLeftX() )
-        )
+       && (laser[m].getLowerRightY() <= getUpperLeftY() )
+       && ( laser[m].getUpperLeftX() <= getLowerRightX() )
+       && ( laser[m].getLowerRightX() >= getUpperLeftX() )
+       )
     {
         isCollision = true;
     }
     return isCollision;
+}
+
+
+void Rectangle::setShip(Rectangle ship[])
+{
+    //Variable Storage
+    double tlx, tly, blx, bly;
+    int Red, Green, Blue;
+    int i = 0;
+    
+    //Create file
+    ifstream in;
+    in.open("spaceship.txt");
+    
+    
+    //Read
+    while(in >> tlx >> tly >> blx >> bly >> Red >> Green >> Blue)
+    {
+        //Rectangle set up
+        ship[i].setUpperLeftX(tlx);
+        ship[i].setUpperLeftY(tly);
+        ship[i].setLowerRightX(blx);
+        ship[i].setLowerRightY(bly);
+        
+        //Color
+        ship[i].setColorRectangle(Color(Red, Green, Blue));
+        i++;
+    }
+    
+    //Close File
+    in.close();
+}
+
+void Rectangle::drawShip(SDL_Plotter& g, Rectangle ship[], const int NUM_)
+{
+    //Data Abstraction to draw the rectangles
+    for(int i = 0; i < NUM_; i++)
+    {
+        ship[i].drawRectangle(g);
+    }
 }
 
 
