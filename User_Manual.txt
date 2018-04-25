@@ -1,0 +1,28 @@
+Code::Masters
+Peter Doe
+Carlos Hernandez
+Kevin Kulda
+Jon Patel
+
+Dr. Fendt (Professor)
+CSI 1430-01
+24 April 2018
+
+			GALAGA User Manual
+
+
+
+	Please use the following keys to operate this game:
+
+'a' - moves the player left.
+'d' - moves the player right.
+'s' - fires a projectile up.
+'r' - initiates the enemies.
+mouse click - pauses and resumes the game.
+
+	Please note that in this game you cannot move the player up or down.
+
+	The object of this game is to destroy all of the enemies before they
+destroy you. Once you initiate the enemeis they will spawn on the screen, 
+fire projectiles down at you and will go into an attack sequence while 
+continuing to fire projectiles at you. 
